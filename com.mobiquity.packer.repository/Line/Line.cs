@@ -10,5 +10,6 @@ namespace com.mobiquity.packer.repository
     {
         public int LineNumber { get; set; }
         public int PackageWeight { get; set; } = 0;
+        public IList<Item>? Items { get; set;}
     }
 }
