@@ -1,3 +1,4 @@
+using com.mobiquity.packer.domain;
 using com.mobiquity.packer.repository;
 using Xunit;
 
@@ -11,6 +12,7 @@ namespace com.mobiquity.packer.test
         private const int allowedItemCost = 100;
 
         private int lineNumber = 0;
+        private DataFile dataFileContent = new DataFile();
 
         [Fact]
         public void DataLineTotalWeightGreaterThanZero()
@@ -18,7 +20,7 @@ namespace com.mobiquity.packer.test
             bool totalPackageWeightGreaterThanZero = false;
 
             // Arrange                      
-            var dataFileContent = new MockDataFileRepository(dataFilePath).GetParsedFileContent();
+            var dataFileContent = GetPackFileData();
 
             // Act
             foreach (var thisLine in dataFileContent.DataLines)                                     // Loop through all available lines and check each line 
@@ -39,7 +41,7 @@ namespace com.mobiquity.packer.test
             // Arrange 
             bool atLeastOneItemInLine = false;
 
-            var dataFileContent = new MockDataFileRepository(dataFilePath).GetParsedFileContent();
+            var dataFileContent = GetPackFileData();
 
             // Act
             foreach (var thisLine in dataFileContent.DataLines)                                     // Loop through all available lines and check each line 
@@ -63,7 +65,7 @@ namespace com.mobiquity.packer.test
             // Arrange 
             bool itemsInRange = false;
 
-            var dataFileContent = new MockDataFileRepository(dataFilePath).GetParsedFileContent();
+            var dataFileContent = GetPackFileData();
 
             // Act
             foreach (var thisLine in dataFileContent.DataLines)                                     // Loop through all available lines and check each line 
@@ -81,7 +83,7 @@ namespace com.mobiquity.packer.test
         public void TotalPackageWeightLessEqualTo100()
         {
             // Arrange 
-            var dataFileContent = new MockDataFileRepository(dataFilePath).GetParsedFileContent();
+            var dataFileContent = GetPackFileData();
 
             // Act
             foreach (var thisLine in dataFileContent.DataLines)                                     // Loop through all available lines and check each line 
@@ -98,7 +100,7 @@ namespace com.mobiquity.packer.test
         {
             // Arrange 
 
-            var dataFileContent = new MockDataFileRepository(dataFilePath).GetParsedFileContent();
+            var dataFileContent = GetPackFileData();
 
             // Act
             foreach (var thisLine in dataFileContent.DataLines)                                     // Loop through all available lines and check each line 
@@ -117,6 +119,20 @@ namespace com.mobiquity.packer.test
                 }
 
                 lineNumber++;
+            }
+        }
+
+        private static DataFile GetPackFileData(bool useMockData = true)
+        {
+            if (useMockData)
+            {
+                // Return Mock repository data
+                return new MockDataFileRepository(dataFilePath).GetParsedFileContent();
+            }
+            else
+            {
+                // Return repository data
+                return new DataFileRepository(dataFilePath).GetParsedFileContent();
             }
         }
     }

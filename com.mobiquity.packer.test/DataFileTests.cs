@@ -7,12 +7,13 @@ namespace com.mobiquity.packer.test
     public class DataFileTests
     {
         private const string dataFilePath = "";
+        private DataFile dataFileContent = new DataFile();
 
         [Fact]
         public void DataFileIsNotEmpty()
         {
             // Arrange
-            string dataFileContent = new MockDataFileRepository(dataFilePath).ReadRawFileContent();         // Mock
+            string dataFileContent = GetPackFileRawData();
 
             // Act
             bool hasContent = dataFileContent.Length > 0;
@@ -25,7 +26,7 @@ namespace com.mobiquity.packer.test
         public void DataFileNeedsAtLeastOneLine()
         {
             // Arrange
-            var dataFileContent = new MockDataFileRepository(dataFilePath).GetParsedFileContent();
+            var dataFileContent = GetPackFileData();
             DataLine firstDataLine = dataFileContent.DataLines[0];
 
             // Act
@@ -80,6 +81,34 @@ namespace com.mobiquity.packer.test
 
             // Assert
             Assert.True(hasParseSuccesfully, $"The datafile needs to contains well formatted data to parse succesfully and cannot be processed at this stage.");
+        }
+
+        private static DataFile GetPackFileData(bool useMockData = true)
+        {
+            if (useMockData)
+            {
+                // Return Mock repository data
+                return new MockDataFileRepository(dataFilePath).GetParsedFileContent();
+            }
+            else
+            {
+                // Return repository data
+                return new DataFileRepository(dataFilePath).GetParsedFileContent();
+            }
+        }
+
+        private static string GetPackFileRawData(bool useMockData = true)
+        {
+            if (useMockData)
+            {
+                // Return Mock repository data
+                return new MockDataFileRepository(dataFilePath).ReadRawFileContent();
+            }
+            else
+            {
+                // Return repository data
+                return new DataFileRepository(dataFilePath).ReadRawFileContent();
+            }
         }
     }
 }
