@@ -83,7 +83,8 @@ namespace com.mobiquity.packer.test
             Assert.True(hasParseSuccesfully, $"The datafile needs to contains well formatted data to parse succesfully and cannot be processed at this stage.");
         }
 
-        private static DataFile GetPackFileData(bool useMockData = true)
+        #region Private
+        private static DataFile GetPackFileData(bool useMockData = false)
         {
             if (useMockData)
             {
@@ -97,7 +98,7 @@ namespace com.mobiquity.packer.test
             }
         }
 
-        private static string GetPackFileRawData(bool useMockData = true)
+        private static string GetPackFileRawData(bool useMockData = false)
         {
             if (useMockData)
             {
@@ -109,6 +110,7 @@ namespace com.mobiquity.packer.test
                 // Return repository data
                 return new DataFileRepository(dataFilePath).ReadRawFileContent();
             }
-        }
+        } 
+        #endregion
     }
 }

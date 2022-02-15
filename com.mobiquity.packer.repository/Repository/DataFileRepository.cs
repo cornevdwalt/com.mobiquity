@@ -4,11 +4,9 @@ namespace com.mobiquity.packer.repository
 {
     public class DataFileRepository : IDataFileRepository
     {
-        private int lineNumber = 1;
         private int allowedPackageWeight = 0;
 
         private string thisFilePath;
-        private string thisFileContent = string.Empty;
         List<DataLine> thisDataLines = new List<DataLine>();
 
         public DataFileRepository(string filePath)
@@ -18,24 +16,19 @@ namespace com.mobiquity.packer.repository
 
         public string ReadRawFileContent()
         {
-            thisFileContent = string.Empty;                         // TODO - // Call services to retrieve the file
-
-            // Check for empty file (TODO)
-
-            return thisFileContent;
+            return System.IO.File.ReadAllText(@"c:\temp\example_input.txt");           // TODO - // Call services to retrieve the file
         }
 
         public DataFile GetParsedFileContent()
         {
-            string fileContent = ReadRawFileContent();
-
-            bool fileParsedSuccessfully = ParseFileContent();
+            bool fileParsedSuccessfully = GetAndParseFileContent();
 
             if (fileParsedSuccessfully)
             {
                 return new DataFile()
                 {
-                    DataLines = thisDataLines
+                    DataLines = thisDataLines,
+                    FilePath = thisFilePath
                 };
             }
 
@@ -43,85 +36,100 @@ namespace com.mobiquity.packer.repository
         }
 
         #region Private methods
-        private bool ParseFileContent()
+        private bool GetAndParseFileContent()
         {
             bool fileParseSuccessfull = true;
+            int lineCounter = 1;
 
-            string fileContent = string.Empty;                          // TODO - Call services to retrieve the raw data
+            string[] dataLines = System.IO.File.ReadAllLines(@"c:\temp\example_input.txt");         // TODO - call service to retrieve file content
 
-            while (true)                                                // Loop until end of file
-            {
-
-                // Get the allowed package weight
-                allowedPackageWeight = GetAllowedPackageWeight();
-
-                // Get the Item(s)
-                var items = GetListOfItemsInLine();
-
-                // Add the new line
-                thisDataLines.Add(new DataLine
+            try
+            { 
+                foreach (string line in dataLines)
                 {
-                    LineNumber = lineNumber,
-                    PackageWeight = allowedPackageWeight,
-                    Items = items
-                });
+                    // Get the allowed package weight
+                    allowedPackageWeight = GetAllowedPackageWeight(line);
+
+                    // Get the Item(s)
+                    var testCaseItems = GetListOfItemsInTestCase(line);
+
+                    // Add the new line
+                    thisDataLines.Add(new DataLine
+                    {
+                        LineNumber = lineCounter,
+                        PackageWeight = allowedPackageWeight,
+                        Items = testCaseItems
+                    });
+
+                    lineCounter++;
+                }
+            }
+            catch (Exception)
+            {
+                throw;
             }
 
             return fileParseSuccessfull;                // TODO - return breaking parse point details
         }
 
-        private int GetAllowedPackageWeight()
+        private int GetAllowedPackageWeight(string dataLine)
         {
             int packageAllowedWeight = 0;
 
-            // start index = 0
-            // up to first :
-            // return integer
+            int searchEndPosition = dataLine.IndexOf(':', 0);
+            string textValue = dataLine.Substring(0, searchEndPosition - 0);
+            var value = Int32.TryParse(textValue, out packageAllowedWeight);
 
             return packageAllowedWeight;
         }
 
-        private List<DataItem> GetListOfItemsInLine()
+        private List<DataItem> GetListOfItemsInTestCase(string dataLine)
         {
             int index = 0;
             decimal weight = 0;
-            int cost = 0;                                       // Keep as Integer to conform to the current format in file, but consider to change to decimal (amount)
+            int cost = 0;                                    // Keep as Integer to conform to the current format in file, but consider to change to decimal (amount)
 
-            List<DataItem> itemsInLine = new List<DataItem>();
+            var itemsInLine = new List<DataItem>();
 
-            // Loop until end of line
-            // start with ( up to first ,   => item number
-            // up to next ,                 => item weight
-            // up to next ,                 => item cost
+            var itemsText = GetItemsInTestCase(dataLine);
 
-            // Find item index
-            index = 1;                      // TODO 
-
-            // Find item weight
-            weight = 1;                     // TODO 
-
-            // Find item cost
-            cost = 1;                       // TODO 
-
-            while (index < thisDataLines.Count)                                     // Loop until end of line
+            foreach (var item in itemsText)
             {
-                DataItem item = new DataItem
+                DataItem newDataItem = new DataItem();
+
+                // Get the different segments of the test case item
+                //
+                string[] itemList = item.Split(",");
+
+                var x = itemList[0].AsSpan(1);                                          // Item index
+                var y = itemList[1];                                                    // Item weight
+                var z = itemList[2].AsSpan(1, itemList[2].Length - 2);                  // Item cost
+
+                _ = Int32.TryParse(x, out index);
+                _ = Decimal.TryParse(y, out weight);                                    // TODO - confirm culture will not cause side effects (cvdw - 15/2/2022)
+                _ = Int32.TryParse(z, out cost);     
+
+                DataItem i = new DataItem
                 {
                     Index = index,
                     Weight = weight,
                     Cost = cost
                 };
-
-                // Validate the item
-                //
-                // Line number  ( > 0 )
-                // Weight       ( > 0 )
-                // Cost         ( > 0 )
-
-                itemsInLine.Add(item);
+                itemsInLine.Add(i);
             }
 
             return itemsInLine;
+        }
+
+        private string[] GetItemsInTestCase(string dataLine)
+        {
+            // Get items in the text case
+            int searchStartPosition = dataLine.IndexOf(':', 0) + 2;
+            dataLine = dataLine.Substring(searchStartPosition, dataLine.Length - searchStartPosition);
+
+            string[] itemList = dataLine.Split(" ");
+
+            return itemList;
         }
         #endregion
     }

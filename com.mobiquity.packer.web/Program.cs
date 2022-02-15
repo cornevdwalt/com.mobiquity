@@ -4,7 +4,7 @@ var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
-builder.Services.AddScoped<IDataFileRepository, MockDataFileRepository>();                          // Mobiquity packer data file 
+//builder.Services.AddScoped<IDataFileRepository, MockDataFileRepository>();                          // Mobiquity packer data file 
 
 var app = builder.Build();
 
