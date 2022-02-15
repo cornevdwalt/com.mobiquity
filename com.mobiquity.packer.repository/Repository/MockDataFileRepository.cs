@@ -20,27 +20,66 @@ namespace com.mobiquity.packer.repository
 
         public DataFile GetParsedFileContent()
         {
-            var mockItem = new DataItem
+            #region Items
+            var mockItemA = new DataItem
             {
                 Cost = 5,
                 Weight = 15,
                 Index = 1
             };
 
-            DataLine mockLine = new DataLine
+            var mockItemB = new DataItem
+            {
+                Cost = 15,
+                Weight = 25,
+                Index = 2
+            };
+
+            var mockItemC = new DataItem
+            {
+                Cost = 25,
+                Weight = 10,
+                Index = 3
+            };
+            #endregion
+
+            #region Lines
+            DataLine mockLineA = new DataLine
             {
                 LineNumber = 1,
                 PackageWeight = 100,
             };
-            mockLine.Items = new List<DataItem>();
-            mockLine.Items.Add(mockItem);
+            mockLineA.Items = new List<DataItem>();
+            mockLineA.Items.Add(mockItemA);
+            mockLineA.Items.Add(mockItemB);
+            mockLineA.Items.Add(mockItemC);
+
+            DataLine mockLineB = new DataLine
+            {
+                LineNumber = 2,
+                PackageWeight = 10,
+            };
+            mockLineB.Items = new List<DataItem>();
+            mockLineB.Items.Add(mockItemA);
+
+            DataLine mockLineC = new DataLine
+            {
+                LineNumber = 3,
+                PackageWeight = 50,
+            };
+            mockLineC.Items = new List<DataItem>();
+            mockLineC.Items.Add(mockItemB);
+            mockLineC.Items.Add(mockItemC); 
+            #endregion
 
             var result = new DataFile
             {
                 FilePath = thisFilePath,
             };
             result.DataLines = new List<DataLine>();
-            result.DataLines.Add(mockLine);
+            result.DataLines.Add(mockLineA);
+            result.DataLines.Add(mockLineB);
+            result.DataLines.Add(mockLineC);
 
             return result;
         }

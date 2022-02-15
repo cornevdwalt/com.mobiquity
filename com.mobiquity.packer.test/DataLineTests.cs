@@ -1,95 +1,123 @@
+using com.mobiquity.packer.repository;
 using Xunit;
 
 namespace com.mobiquity.packer.test
 {
     public class DataLineTests
     {
-        int lineNumber = 0;
+        private const string dataFilePath = "";
+        private const int allowedPackageWeight = 100;
+        private const int allowedItemWeight = 100;
+        private const int allowedItemCost = 100;
+
+        private int lineNumber = 0;
 
         [Fact]
         public void DataLineTotalWeightGreaterThanZero()
         {
-            // Arrange
-            lineNumber = 10;
-
-            // Act
             bool totalPackageWeightGreaterThanZero = false;
 
-            // Assert
-            Assert.True(totalPackageWeightGreaterThanZero, $"The total weight of a package allowed must be greater than zero. Line# {lineNumber}");
+            // Arrange                      
+            var dataFileContent = new MockDataFileRepository(dataFilePath).GetParsedFileContent();
+
+            // Act
+            foreach (var thisLine in dataFileContent.DataLines)                                     // Loop through all available lines and check each line 
+            {
+                // Confirm the package weight exists
+                totalPackageWeightGreaterThanZero = thisLine.PackageWeight > 0;
+
+                // Assert
+                Assert.True(totalPackageWeightGreaterThanZero, $"The total weight of a package allowed must be greater than zero. Line# {lineNumber}");
+
+                lineNumber++;
+            }
         }
 
         [Fact]
         public void DataLineHasAtLeastOneItem()
         {
-            // Arrange
-            lineNumber = 10;
-            int numberOfItemsInLine = 0;
+            // Arrange 
+            bool atLeastOneItemInLine = false;
+
+            var dataFileContent = new MockDataFileRepository(dataFilePath).GetParsedFileContent();
 
             // Act
-            bool atLeastOneItemInLine = numberOfItemsInLine > 0;
+            foreach (var thisLine in dataFileContent.DataLines)                                     // Loop through all available lines and check each line 
+            {
+                atLeastOneItemInLine = thisLine.Items.Count > 0;
 
-            // Assert
-            Assert.True(atLeastOneItemInLine, $"There must be at least one item in a package. Line# {lineNumber}");
+                // Assert
+                Assert.True(atLeastOneItemInLine, $"There must be at least one item in a package. Line# {lineNumber}");
+
+                lineNumber++;
+            }
         }
 
         [Fact]
         public void NumberOfItemsinDataLineLessEqualTo15()
         {
-            // Arrange
-            lineNumber = 10;
-            int numberOfItemsInLine = 20;
+            //
+            // TODO - Confirm this is a constrain (cvdw) - 15/2/2022
+            //
+
+            // Arrange 
+            bool itemsInRange = false;
+
+            var dataFileContent = new MockDataFileRepository(dataFilePath).GetParsedFileContent();
 
             // Act
-            bool itemsInRange = numberOfItemsInLine <= 15;
+            foreach (var thisLine in dataFileContent.DataLines)                                     // Loop through all available lines and check each line 
+            {
+                itemsInRange = thisLine.Items.Count <= 15;
 
-            // Assert
-            Assert.True(itemsInRange, $"There cannot be more than 15 items in a single package. Line# {lineNumber}");
-        }
+                // Assert
+                Assert.True(itemsInRange, $"There cannot be more than 15 items in a single package. Line# {lineNumber}");
 
-        [Fact]
-        public void ItemWeightLessEqualTo100()
-        {
-            // Arrange
-            lineNumber = 10;
-            int itemWeight = 200;
-            int allowedWeight = 100;
-
-            // Act
-            bool itemCorrectWeight = itemWeight <= allowedWeight;
-
-            // Assert
-            Assert.True(itemCorrectWeight, $"An item may not weight more then {allowedWeight}. Line# {lineNumber}");
-        }
-
-        [Fact]
-        public void ItemCostLessEqualTo100()
-        {
-            // Arrange
-            lineNumber = 10;
-            int itemCost = 200;
-            int allowedCost = 100;
-
-            // Act
-            bool itemCorrectCost = itemCost <= allowedCost;
-
-            // Assert
-            Assert.True(itemCorrectCost, $"The cost of an item may not be more then {allowedCost}. Line# {lineNumber}");
+                lineNumber++;
+            }
         }
 
         [Fact]
         public void TotalPackageWeightLessEqualTo100()
         {
-            // Arrange
-            lineNumber = 10;
-            int totalPackageWeight = 200;
-            int allowedWeight = 100;
+            // Arrange 
+            var dataFileContent = new MockDataFileRepository(dataFilePath).GetParsedFileContent();
 
             // Act
-            bool packageCorrectWeight = totalPackageWeight <= allowedWeight;
+            foreach (var thisLine in dataFileContent.DataLines)                                     // Loop through all available lines and check each line 
+            {
+                // Assert
+                Assert.True(thisLine.PackageWeight <= allowedPackageWeight, $"The total weight of a package may not be more then {allowedPackageWeight}. Line# {lineNumber}");
 
-            // Assert
-            Assert.True(packageCorrectWeight, $"The total weight of a package may not be more then {allowedWeight}. Line# {lineNumber}");
+                lineNumber++;
+            }
+        }
+
+        [Fact]
+        public void ItemWeightAndCostLessEqualTo100()
+        {
+            // Arrange 
+
+            var dataFileContent = new MockDataFileRepository(dataFilePath).GetParsedFileContent();
+
+            // Act
+            foreach (var thisLine in dataFileContent.DataLines)                                     // Loop through all available lines and check each line 
+            {
+                // Confirm all the items in the test case are valid 
+                //
+                foreach (var thisItem in thisLine.Items)
+                {
+                    Assert.True(thisItem.Index > 0, $"The datafile needs to contains well formatted data to parse succesfully and the item needs an index in the test case. The line containing the invalid data is in line# {lineNumber}");
+
+                    Assert.True(thisItem.Weight > 0, $"The datafile needs to contains well formatted data to parse succesfully and the item needs a weight in the test case. The line containing the invalid data is in line# {lineNumber}");
+                    Assert.True(thisItem.Weight <= allowedItemWeight, $"The datafile needs to contains well formatted data to parse succesfully and the item needs a weight less or equal than 100 the test case. The line containing the invalid data is in line# {lineNumber}");
+
+                    Assert.True(thisItem.Cost > 0, $"The datafile needs to contains well formatted data to parse succesfully and the item needs a cost in the test case. The line containing the invalid data is in line# {lineNumber}");
+                    Assert.True(thisItem.Cost <= allowedItemCost, $"The datafile needs to contains well formatted data to parse succesfully and the item needs a cost less or equal than 100 the test case. The line containing the invalid data is in line# {lineNumber}");
+                }
+
+                lineNumber++;
+            }
         }
     }
 }

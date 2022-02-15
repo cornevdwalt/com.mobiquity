@@ -6,7 +6,7 @@ namespace com.mobiquity.packer.test
 {
     public class DataFileTests
     {
-        string dataFilePath = "";
+        private const string dataFilePath = "";
 
         [Fact]
         public void DataFileIsNotEmpty()
@@ -20,7 +20,6 @@ namespace com.mobiquity.packer.test
             // Assert
             Assert.True(hasContent, "The datafile needs to contains data and cannot be empty");
         }
-
 
         [Fact]
         public void DataFileNeedsAtLeastOneLine()
@@ -37,15 +36,16 @@ namespace com.mobiquity.packer.test
         }
 
         [Fact]
-        public void DataFileParseSuccessfully()
+        public void DataFileParseAllLinesSuccessfully()
         {
             // Arrange                      
-            var dataFileContent = new MockDataFileRepository(dataFilePath).GetParsedFileContent();      //  Parse file and confirm all data structures were successfully created                 
-            bool parseSuccessfully = true;
+            var dataFileContent = new MockDataFileRepository(dataFilePath).GetParsedFileContent();
             int lineNumber = 1;
+            bool parseSuccessfully = true;
 
             // Act
             parseSuccessfully = dataFileContent.DataLines.Count > 0;                                    // Confirm there is at least one line
+            Assert.True(parseSuccessfully, $"The datafile needs to contains well formatted data to parse succesfully and need at least one test case/line.");
 
             if (parseSuccessfully)
             {
@@ -54,16 +54,23 @@ namespace com.mobiquity.packer.test
                 {
 
                     // Confirm the package weight exists
-                    if (thisLine.PackageWeight <= 0) { parseSuccessfully = false; break; }
+                    if (thisLine.PackageWeight <= 0) { parseSuccessfully = false; }
+                    Assert.True(parseSuccessfully, $"The datafile needs to contains well formatted data to parse succesfully and need a valid package weight. The line containing the invalid data is in line# {lineNumber}");
 
-                    if (thisLine.Items.Count == 0) { parseSuccessfully = false; break; }
+                    if (thisLine.Items.Count == 0) { parseSuccessfully = false; }
+                    Assert.True(parseSuccessfully, $"The datafile needs to contains well formatted data to parse succesfully and need at least one item in the test case. The line containing the invalid data is in line# {lineNumber}");
 
                     // Confirm all the item information exist
                     foreach (var thisItem in thisLine.Items)
                     {
-                        if (thisItem.Index <= 0) { parseSuccessfully = false; break; }
-                        if (thisItem.Weight <= 0) { parseSuccessfully = false; break; }
-                        if (thisItem.Cost <= 0) { parseSuccessfully = false; break; }
+                        if (thisItem.Index <= 0) { parseSuccessfully = false; }
+                        Assert.True(parseSuccessfully, $"The datafile needs to contains well formatted data to parse succesfully and the item needs an index in the test case. The line containing the invalid data is in line# {lineNumber}");
+
+                        if (thisItem.Weight <= 0) { parseSuccessfully = false; }
+                        Assert.True(parseSuccessfully, $"The datafile needs to contains well formatted data to parse succesfully and the item needs a weight in the test case. The line containing the invalid data is in line# {lineNumber}");
+
+                        if (thisItem.Cost <= 0) { parseSuccessfully = false; }
+                        Assert.True(parseSuccessfully, $"The datafile needs to contains well formatted data to parse succesfully and the needs a cost in the test case. The line containing the invalid data is in line# {lineNumber}");
                     }
                     lineNumber++;
                 }
@@ -72,9 +79,7 @@ namespace com.mobiquity.packer.test
             bool hasParseSuccesfully = parseSuccessfully;
 
             // Assert
-            Assert.True(hasParseSuccesfully, $"The datafile needs to contains well formatted data to parse succesfully. The line containing the invalid data is in line# {lineNumber}");
+            Assert.True(hasParseSuccesfully, $"The datafile needs to contains well formatted data to parse succesfully and cannot be processed at this stage.");
         }
-
-
     }
 }
