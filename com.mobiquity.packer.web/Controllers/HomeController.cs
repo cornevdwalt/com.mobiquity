@@ -7,6 +7,7 @@ namespace com.mobiquity.web.Controllers
     public class HomeController : Controller
     {
         private readonly ILogger<HomeController> _logger;
+        //private readonly IDataFile<HomeController> _dataFile;
 
         public HomeController(ILogger<HomeController> logger)
         {

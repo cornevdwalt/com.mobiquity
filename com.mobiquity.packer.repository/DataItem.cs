@@ -1,6 +1,6 @@
-﻿namespace com.mobiquity.packer.repository
+﻿namespace com.mobiquity.packer.domain
 {
-    public class Item : IItem
+    public class DataItem 
     {
         public int Index { get; set; }
         public decimal Weight { get; set; } = 0;

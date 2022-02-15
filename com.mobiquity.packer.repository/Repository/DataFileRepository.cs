@@ -1,50 +1,53 @@
-﻿namespace com.mobiquity.packer.repository
+﻿using com.mobiquity.packer.domain;
+
+namespace com.mobiquity.packer.repository
 {
-    public class DataFile : IDataFile
+    public class DataFileRepository : IDataFileRepository
     {
-        public string FilePath { get; set; } 
-        public List<Line> DataLines { get; set; }
-        
         private int lineNumber = 1;
         private int allowedPackageWeight = 0;
 
-        public DataFile(string filePath)                        // Constructor
+        private string thisFilePath;
+        private string thisFileContent = string.Empty;
+        List<DataLine> thisDataLines = new List<DataLine>();
+
+        public DataFileRepository(string filePath)
         {
-            FilePath = filePath;
+            thisFilePath = filePath;
         }
 
-        public DataFile GetDataFileContent()
+        public string ReadRawFileContent()
         {
-            string fileContent = ReadFileContent();
+            thisFileContent = string.Empty;                         // TODO - // Call services to retrieve the file
+
+            // Check for empty file (TODO)
+
+            return thisFileContent;
+        }
+
+        public DataFile GetParsedFileContent()
+        {
+            string fileContent = ReadRawFileContent();
 
             bool fileParsedSuccessfully = ParseFileContent();
 
             if (fileParsedSuccessfully)
             {
-                return new DataFile(FilePath)
+                return new DataFile()
                 {
-                    DataLines = DataLines
+                    DataLines = thisDataLines
                 };
             }
 
-            return new DataFile(FilePath);              // TODO - return error code
+            return new DataFile();                           // TODO - return error code
         }
 
-        private string ReadFileContent()
-        {
-
-            // Call services to retrieve the file
-
-            // Check for empty file
-
-            return "";
-        }
-
+        #region Private methods
         private bool ParseFileContent()
         {
             bool fileParseSuccessfull = true;
 
-            List<Line>  dataLines = new List<Line>();
+            string fileContent = string.Empty;                          // TODO - Call services to retrieve the raw data
 
             while (true)                                                // Loop until end of file
             {
@@ -56,7 +59,7 @@
                 var items = GetListOfItemsInLine();
 
                 // Add the new line
-                DataLines.Add(new Line
+                thisDataLines.Add(new DataLine
                 {
                     LineNumber = lineNumber,
                     PackageWeight = allowedPackageWeight,
@@ -78,13 +81,13 @@
             return packageAllowedWeight;
         }
 
-        private List<Item> GetListOfItemsInLine()
+        private List<DataItem> GetListOfItemsInLine()
         {
             int index = 0;
             decimal weight = 0;
             int cost = 0;                                       // Keep as Integer to conform to the current format in file, but consider to change to decimal (amount)
 
-            List<Item> itemsInLine = new List<Item>();
+            List<DataItem> itemsInLine = new List<DataItem>();
 
             // Loop until end of line
             // start with ( up to first ,   => item number
@@ -100,9 +103,9 @@
             // Find item cost
             cost = 1;                       // TODO 
 
-            while (index < DataLines.Count)                                     // Loop until end of line
+            while (index < thisDataLines.Count)                                     // Loop until end of line
             {
-                Item item = new Item
+                DataItem item = new DataItem
                 {
                     Index = index,
                     Weight = weight,
@@ -120,5 +123,6 @@
 
             return itemsInLine;
         }
+        #endregion
     }
 }
