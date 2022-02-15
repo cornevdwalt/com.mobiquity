@@ -13,14 +13,31 @@ namespace com.mobiquity.web.Controllers
             _logger = logger;
         }
 
-        public IActionResult Index()
+        public IActionResult ParseFile()
         {
             return View();
         }
 
-        public IActionResult Privacy()
+
+        [HttpPost]
+        public IActionResult ParseFile(DataFileViewModel dataFile)
         {
-            return View();
+            //var items = _shoppingCart.GetShoppingCartItems();
+            //_shoppingCart.ShoppingCartItems = items;
+
+            //if (_shoppingCart.ShoppingCartItems.Count == 0)
+            //{
+            //    ModelState.AddModelError("", "Your cart is empty, add some pies first");
+            //}
+
+            //if (ModelState.IsValid)
+            //{
+            //    _orderRepository.CreateOrder(order);
+            //    _shoppingCart.ClearCart();
+            //    return RedirectToAction("CheckoutComplete");
+            //}
+
+            return View(dataFile);
         }
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]

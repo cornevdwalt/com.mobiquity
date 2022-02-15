@@ -20,4 +20,8 @@
     </PackageReference>
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\com.mobiquity.packer.repository\com.mobiquity.packer.repository.csproj" />
+  </ItemGroup>
+
 </Project>

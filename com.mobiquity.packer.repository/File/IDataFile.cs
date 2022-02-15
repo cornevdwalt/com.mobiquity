@@ -1,5 +1,5 @@
 ﻿
-namespace com.mobiquity.packer.repository.File
+namespace com.mobiquity.packer.repository
 {
     public interface IDataFile
     {

@@ -1,0 +1,41 @@
+﻿@model DataFileViewModel
+
+@{
+    ViewData["Title"] = "Home Page";
+}
+
+<div class="text-center">
+    <h1 class="display-4">Mobiquity Packer assessment</h1>
+</div>
+
+
+<form asp-action="ParseFile" method="post" class="form-horizontal" role="form">
+
+    <h3>Please enter the path to the data file</h3>
+
+    <div asp-validation-summary="All" class="text-danger"></div>
+
+    <div class="form-group">
+        <label asp-for="FilePath" class="col-md-2 control-label"></label>
+        <div class="col-md-5">
+            <input asp-for="FilePath" class="form-control" />
+        </div>
+    </div>
+
+      <div class="form-group">
+        <label asp-for="ParseResults" class="col-md-2 control-label"></label>
+        <div class="col-md-5">
+           @Html.TextAreaFor(model => model.ParseResults, new { @class = "form-control", @rows = 10 })
+
+        </div>
+    </div>
+
+        <div class="form-group">
+        <div class="col-md-offset-2 col-md-5">
+            <input type="submit" class="btn btn-primary" value="Retrieve and parse the input file" />
+        </div>
+    </div>
+
+</form>
+
+
