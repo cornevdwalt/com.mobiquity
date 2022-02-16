@@ -1,5 +1,6 @@
 ﻿using com.mobiquity.packer.domain;
 using com.mobiquity.packer.repository;
+using System.Collections;
 
 namespace com.mobiquity.packer.api
 {
@@ -32,16 +33,102 @@ namespace com.mobiquity.packer.api
         //}
 
 
-        private string ProcessPackerData(DataFile data)
+        private string ProcessPackerData(DataFile dataFileContent)
         {
             string results = string.Empty;
+            decimal totalWeightOfItemsSelected = 0;
 
-            foreach (var line in data.DataLines)
+            List<SelectedItem> selectedItems = new List<SelectedItem>();
+            string itemsSelectedForLine = string.Empty;
+            decimal totalWeightForItemsSelected = 0;
+            int totalCostForItemsSelected = 0;
+
+            foreach (var line in dataFileContent.DataLines)
             {
-                results += line.LineNumber + " ";
+                // Initialize for new data line
+                itemsSelectedForLine = string.Empty;
+                totalWeightForItemsSelected = 0;
+                totalCostForItemsSelected = 0;
+
+                // Filter the items in the line for potential candidates
+                //
+                var filteringQuery = (from item in line.Items
+                                      where item.Weight <= Constrains.MAX_ITEM_COST      // Exclude items weighting more than allowed weight  
+                                             && item.Cost <= Constrains.MAX_ITEM_COST    // Exclude items costing more than allowed cost 
+                                             && item.Weight <= line.PackageWeight        // Excluding items weigthing more than the allowed package weight
+                                      orderby item.Cost                                  // Looking for items costing the most
+                                      select item).Take(15);                             // Considering only up to 15 items
+
+
+                var test = filteringQuery.ToList();
+
+                var selectedItemQuary = filteringQuery.OrderBy(i => i.Index);           // Order candidates by index for required output
+
+                // Include items in package while total weight = 100 and not greater than packaged allowd
+                //
+                foreach (var candidate in selectedItemQuary)
+                {
+                    // Check total weight for the package already selected
+                    decimal checkWeight = totalWeightOfItemsSelected + candidate.Weight;
+                    if (checkWeight > Constrains.MAX_PACKAGE_WEIGHT || checkWeight > line.PackageWeight) break;
+
+                    // Add this item to the package list
+                    //
+                    itemsSelectedForLine = +candidate.Index + " ";
+                    totalWeightForItemsSelected = +candidate.Weight;
+                    totalCostForItemsSelected = +candidate.Cost;
+                }
+
+                // Add the results of the items selected in the line to the List (for calc of same weight/price)
+                selectedItems.Add(new SelectedItem
+                {
+                    Items = itemsSelectedForLine,
+                    TotalWeight = totalWeightForItemsSelected,
+                    TotalCost = totalCostForItemsSelected
+                });
+
+                // If no item was selected indicate it accordingly
+                if (selectedItems[0].Items == String.Empty) selectedItems[0].Items = "-";
             }
 
+            // Do final selection - if package with same weight - use one with smallest cost 
+            var finalFilteringQuery = (from x in selectedItems
+                                       orderby x.TotalCost
+                                       select x);
+
+            // Return the final results
+            foreach (var x in selectedItems)
+            {
+                results += x.Items;
+            };
+
             return results;
+        }
+
+
+        private class SelectedItem : IEnumerable
+        {
+            public string Items { get; set; }
+            public decimal TotalWeight { get; set; }
+            public int TotalCost { get; set; }
+
+            List<SelectedItem> mylist = new List<SelectedItem>();
+
+            public SelectedItem this[int index]
+            {
+                get { return mylist[index]; }
+                set { mylist.Insert(index, value); }
+            }
+
+            public IEnumerator<SelectedItem> GetEnumerator()
+            {
+                return mylist.GetEnumerator();
+            }
+
+            IEnumerator IEnumerable.GetEnumerator()
+            {
+                return this.GetEnumerator();
+            }
         }
     }
 }

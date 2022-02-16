@@ -4,6 +4,6 @@
     {
         public int Index { get; set; }
         public decimal Weight { get; set; } = 0;
-        public decimal Cost { get; set; } = 0;
+        public int Cost { get; set; } = 0;
     }
 }
