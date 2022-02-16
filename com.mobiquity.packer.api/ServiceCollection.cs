@@ -12,6 +12,7 @@ namespace com.mobiquity.packer.api
     {
         public static IServiceCollection PackerLibrary(this IServiceCollection services)
         {
+            services.AddScoped<IPackerService, PackerService>();                            // Packer repository
             services.AddScoped<IPackerRepository, PackerRepository>();                      // Packer repository
             services.AddScoped<IPacker, Packer>();                                          // com.mobiquity.packer service
             return services;

@@ -16,7 +16,7 @@ namespace com.mobiquity.packer.repository
 
         public string ReadRawFileContent()
         {
-            return System.IO.File.ReadAllText(@"c:\temp\example_input.txt");           // TODO - // Call services to retrieve the file
+            return DataService.ReadAllDataInFile(thisFilePath);
         }
 
         public DataFile GetParsedFileContent()
@@ -41,10 +41,10 @@ namespace com.mobiquity.packer.repository
             bool fileParseSuccessfull = true;
             int lineCounter = 1;
 
-            string[] dataLines = System.IO.File.ReadAllLines(@"c:\temp\example_input.txt");         // TODO - call service to retrieve file content
+            string[] dataLines = DataService.RetrieveDataFileContent(thisFilePath);     // Retrieve the content of the data file as separate lines
 
             try
-            { 
+            {
                 foreach (string line in dataLines)
                 {
                     // Get the allowed package weight

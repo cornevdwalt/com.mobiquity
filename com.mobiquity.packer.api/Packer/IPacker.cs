@@ -1,4 +1,6 @@
-﻿namespace com.mobiquity.packer.api
+﻿using com.mobiquity.packer.repository;
+
+namespace com.mobiquity.packer.api
 {
     public interface IPacker
     {
