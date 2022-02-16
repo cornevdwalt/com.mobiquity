@@ -1,4 +1,5 @@
-﻿using Microsoft.Extensions.DependencyInjection;
+﻿using com.mobiquity.packer.repository;
+using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -11,7 +12,8 @@ namespace com.mobiquity.packer.api
     {
         public static IServiceCollection PackerLibrary(this IServiceCollection services)
         {
-            services.AddScoped<IPacker, Packer>();                      // com.mobiquity.packer service
+            services.AddScoped<IPackerRepository, PackerRepository>();                      // Packer repository
+            services.AddScoped<IPacker, Packer>();                                          // com.mobiquity.packer service
             return services;
         }
     }

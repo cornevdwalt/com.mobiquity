@@ -2,14 +2,14 @@
 
 namespace com.mobiquity.packer.repository
 {
-    public class DataFileRepository : IDataFileRepository
+    public class PackerRepository : IPackerRepository
     {
         private int allowedPackageWeight = 0;
 
         private string thisFilePath;
         List<DataLine> thisDataLines = new List<DataLine>();
 
-        public DataFileRepository(string filePath)
+        public PackerRepository(string filePath)
         {
             thisFilePath = filePath;
         }

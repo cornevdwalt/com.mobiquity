@@ -4,7 +4,6 @@ using Microsoft.Extensions.DependencyInjection;
 int row = 0;
 string results;
 
-
 // Setup packer dependency injection
 //
 var serviceProvider = new ServiceCollection()

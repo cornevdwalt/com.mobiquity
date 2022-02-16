@@ -4,12 +4,12 @@
     {
         public static string Pack(string filePath)
         {
-            return "AAA";
+            return filePath;            // Mock => echo back
         }
 
         public static string Pack(string filePath, bool ExtendedLogging)           // Override with extended logging included
         {
-            return "BBB";
+            return filePath;            // Mock => echo back
         }
 
     }

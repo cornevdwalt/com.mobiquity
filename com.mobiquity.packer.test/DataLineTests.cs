@@ -127,12 +127,12 @@ namespace com.mobiquity.packer.test
             if (useMockData)
             {
                 // Return Mock repository data
-                return new MockDataFileRepository(dataFilePath).GetParsedFileContent();
+                return new MockPackerRepository(dataFilePath).GetParsedFileContent();
             }
             else
             {
                 // Return repository data
-                return new DataFileRepository(dataFilePath).GetParsedFileContent();
+                return new PackerRepository(dataFilePath).GetParsedFileContent();
             }
         }
     }

@@ -40,7 +40,7 @@ namespace com.mobiquity.packer.test
         public void DataFileParseAllLinesSuccessfully()
         {
             // Arrange                      
-            var dataFileContent = new MockDataFileRepository(dataFilePath).GetParsedFileContent();
+            var dataFileContent = new MockPackerRepository(dataFilePath).GetParsedFileContent();
             int lineNumber = 1;
             bool parseSuccessfully = true;
 
@@ -89,12 +89,12 @@ namespace com.mobiquity.packer.test
             if (useMockData)
             {
                 // Return Mock repository data
-                return new MockDataFileRepository(dataFilePath).GetParsedFileContent();
+                return new MockPackerRepository(dataFilePath).GetParsedFileContent();
             }
             else
             {
                 // Return repository data
-                return new DataFileRepository(dataFilePath).GetParsedFileContent();
+                return new PackerRepository(dataFilePath).GetParsedFileContent();
             }
         }
 
@@ -103,12 +103,12 @@ namespace com.mobiquity.packer.test
             if (useMockData)
             {
                 // Return Mock repository data
-                return new MockDataFileRepository(dataFilePath).ReadRawFileContent();
+                return new MockPackerRepository(dataFilePath).ReadRawFileContent();
             }
             else
             {
                 // Return repository data
-                return new DataFileRepository(dataFilePath).ReadRawFileContent();
+                return new PackerRepository(dataFilePath).ReadRawFileContent();
             }
         } 
         #endregion

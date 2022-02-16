@@ -2,11 +2,11 @@
 
 namespace com.mobiquity.packer.repository
 {
-    public class MockDataFileRepository : IDataFileRepository
+    public class MockPackerRepository : IPackerRepository
     {
         private string thisFilePath;
 
-        public MockDataFileRepository(string filePath)
+        public MockPackerRepository(string filePath)
         {
             thisFilePath = filePath;
         }
@@ -20,7 +20,7 @@ namespace com.mobiquity.packer.repository
 
         public DataFile GetParsedFileContent()
         {
-            #region Items
+            #region Mock Items
             var mockItemA = new DataItem
             {
                 Cost = 5,
@@ -43,7 +43,7 @@ namespace com.mobiquity.packer.repository
             };
             #endregion
 
-            #region Lines
+            #region Mock Lines
             DataLine mockLineA = new DataLine
             {
                 LineNumber = 1,
