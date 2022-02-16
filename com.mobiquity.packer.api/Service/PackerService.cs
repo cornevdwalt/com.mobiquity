@@ -12,7 +12,7 @@ namespace com.mobiquity.packer.api
         {
             string results = string.Empty;
 
-            var packerRepository = new MockPackerRepository(filePath);                  // Mock for now - need to change to di
+            var packerRepository = new PackerRepository(filePath);                  //  need to change to di
 
             // Get the data file content
             var data = packerRepository.GetParsedFileContent();
@@ -36,7 +36,6 @@ namespace com.mobiquity.packer.api
         private string ProcessPackerData(DataFile dataFileContent)
         {
             string results = string.Empty;
-            decimal totalWeightOfItemsSelected = 0;
 
             List<SelectedItem> selectedItems = new List<SelectedItem>();
             string itemsSelectedForLine = string.Empty;
@@ -45,10 +44,12 @@ namespace com.mobiquity.packer.api
 
             foreach (var line in dataFileContent.DataLines)
             {
-                // Initialize for new data line
+                #region Initialize for new data line
+                //selectedItems = new List<SelectedItem>();
                 itemsSelectedForLine = string.Empty;
                 totalWeightForItemsSelected = 0;
-                totalCostForItemsSelected = 0;
+                totalCostForItemsSelected = 0; 
+                #endregion
 
                 // Filter the items in the line for potential candidates
                 //
@@ -56,39 +57,41 @@ namespace com.mobiquity.packer.api
                                       where item.Weight <= Constrains.MAX_ITEM_COST      // Exclude items weighting more than allowed weight  
                                              && item.Cost <= Constrains.MAX_ITEM_COST    // Exclude items costing more than allowed cost 
                                              && item.Weight <= line.PackageWeight        // Excluding items weigthing more than the allowed package weight
-                                      orderby item.Cost                                  // Looking for items costing the most
+                                      orderby item.Cost descending                       // Looking for items costing the most
                                       select item).Take(15);                             // Considering only up to 15 items
+
 
 
                 var test = filteringQuery.ToList();
 
-                var selectedItemQuary = filteringQuery.OrderBy(i => i.Index);           // Order candidates by index for required output
 
-                // Include items in package while total weight = 100 and not greater than packaged allowd
+                // Loop through all the items in the test case and keep
+                // including items in the package while the total weight for the package is less than 100 (constrain)
+                // and not greater than the toal weight for this packaged allowd
                 //
-                foreach (var candidate in selectedItemQuary)
+                foreach (var candidate in filteringQuery)
                 {
                     // Check total weight for the package already selected
-                    decimal checkWeight = totalWeightOfItemsSelected + candidate.Weight;
+                    decimal checkWeight = totalWeightForItemsSelected + candidate.Weight;
                     if (checkWeight > Constrains.MAX_PACKAGE_WEIGHT || checkWeight > line.PackageWeight) break;
 
                     // Add this item to the package list
                     //
-                    itemsSelectedForLine = +candidate.Index + " ";
-                    totalWeightForItemsSelected = +candidate.Weight;
-                    totalCostForItemsSelected = +candidate.Cost;
+                    if (itemsSelectedForLine == "")
+                        itemsSelectedForLine += candidate.Index + " ";
+                    else
+                        itemsSelectedForLine += "," + candidate.Index + " ";
+
+                    totalWeightForItemsSelected += candidate.Weight;
+                    totalCostForItemsSelected += candidate.Cost;
                 }
 
-                // Add the results of the items selected in the line to the List (for calc of same weight/price)
                 selectedItems.Add(new SelectedItem
                 {
-                    Items = itemsSelectedForLine,
+                    Items = String.IsNullOrEmpty(itemsSelectedForLine) ? "-" : itemsSelectedForLine,
                     TotalWeight = totalWeightForItemsSelected,
                     TotalCost = totalCostForItemsSelected
                 });
-
-                // If no item was selected indicate it accordingly
-                if (selectedItems[0].Items == String.Empty) selectedItems[0].Items = "-";
             }
 
             // Do final selection - if package with same weight - use one with smallest cost 
@@ -96,12 +99,9 @@ namespace com.mobiquity.packer.api
                                        orderby x.TotalCost
                                        select x);
 
-            // Return the final results
-            foreach (var x in selectedItems)
-            {
-                results += x.Items;
-            };
 
+            // Prepare and return the final results
+            foreach (var x in selectedItems) { results += x.Items + " | "; };
             return results;
         }
 
