@@ -1,4 +1,4 @@
-﻿using com.mobiquity.packer.api;
+﻿using com.mobiquity.packer.Packer;
 using com.mobiquity.packer.repository;
 using System;
 using System.Collections.Generic;
@@ -100,7 +100,7 @@ namespace com.mobiquity.packer.test
             else
             {
                 // Return repository data
-                return new Packer().Pack(dataFilePath);
+                return new Packer.Packer().pack(dataFilePath);
             }
         }
     }

@@ -1,10 +1,10 @@
 ﻿using com.mobiquity.packer.repository;
 
-namespace com.mobiquity.packer.api
+namespace com.mobiquity.packer.Packer
 {
     public interface IPacker
     {
-        string Pack(string filePath);
-        string Pack(string filePath, bool ExtendedLogging);
+        string pack(string filePath);
+        string pack(string filePath, bool ExtendedLogging);
     }
 }

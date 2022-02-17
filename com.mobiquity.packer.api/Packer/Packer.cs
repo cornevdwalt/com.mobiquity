@@ -1,11 +1,11 @@
 ﻿using com.mobiquity.packer.data;
 using com.mobiquity.packer.repository;
 
-namespace com.mobiquity.packer.api
+namespace com.mobiquity.packer.Packer
 {
     public class Packer : IPacker
     {
-        public string Pack(string filePath)
+        public string pack(string filePath)
         {
             try
             {
@@ -21,7 +21,7 @@ namespace com.mobiquity.packer.api
             }
         }
 
-        public string Pack(string filePath, bool ExtendedLogging)                               // Override with extended logging included
+        public string pack(string filePath, bool ExtendedLogging)                               // Override with extended logging included
         {
             try
             {

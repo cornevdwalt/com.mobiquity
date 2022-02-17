@@ -1,7 +1,7 @@
 ﻿using com.mobiquity.packer.domain;
 using com.mobiquity.packer.repository;
 
-namespace com.mobiquity.packer.api
+namespace com.mobiquity.packer.Packer
 {
     public interface IPackerService
     {

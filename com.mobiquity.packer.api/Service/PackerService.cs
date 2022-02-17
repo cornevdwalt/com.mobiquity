@@ -3,7 +3,7 @@ using com.mobiquity.packer.domain;
 using com.mobiquity.packer.repository;
 using System.Collections;
 
-namespace com.mobiquity.packer.api
+namespace com.mobiquity.packer.Packer
 {
     public class PackerService : IPackerService
     {

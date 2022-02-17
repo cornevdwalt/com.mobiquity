@@ -1,4 +1,4 @@
-﻿namespace com.mobiquity.packer.api
+﻿namespace com.mobiquity.packer.Packer
 {
     public static class MockPacker
     {

@@ -1,8 +1,8 @@
-﻿using com.mobiquity.packer.api;
+﻿using com.mobiquity.packer.Packer;
 using Microsoft.Extensions.DependencyInjection;
 
 /// <summary>
-/// TEST DATA FILE PATH : "c:\temp\example_input.txt"
+/// TEST DATA FILE PATH : c:\temp\example_input.txt
 /// </summary>
 
 int row = 0;
@@ -23,7 +23,7 @@ do
     string? input = Console.ReadLine();
     if (string.IsNullOrEmpty(input)) break;
 
-    results = packer.Pack(input);                   // Pass input to the Packer to proces
+    results = packer.pack(input);                   // Pass input to the Packer to proces
     //results = MockPacker.Pack(input);             // Mock for testing directly (static)
 
     Console.WriteLine("---------------------------------------------------");

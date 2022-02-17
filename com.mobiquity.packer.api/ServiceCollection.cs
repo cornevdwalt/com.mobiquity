@@ -6,7 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace com.mobiquity.packer.api
+namespace com.mobiquity.packer.Packer
 {
     public static class IServiceCollectionExtension
     {

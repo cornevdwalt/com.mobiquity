@@ -1,4 +1,4 @@
-﻿using com.mobiquity.packer.api;
+﻿using com.mobiquity.packer.Packer;
 using com.mobiquity.web.Models;
 using Microsoft.AspNetCore.Mvc;
 using System.Diagnostics;
@@ -27,7 +27,7 @@ namespace com.mobiquity.web.Controllers
         {
             if (ModelState.IsValid)
             {
-                dataFile.ParseResults = _packerService.Pack(dataFile.FilePath);
+                dataFile.ParseResults = _packerService.pack(dataFile.FilePath);
                 ViewBag.Response = dataFile.ParseResults;
             }
 
