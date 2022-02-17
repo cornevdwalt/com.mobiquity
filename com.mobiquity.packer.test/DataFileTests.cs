@@ -6,7 +6,7 @@ namespace com.mobiquity.packer.test
 {
     public class DataFileTests
     {
-        private const string dataFilePath = "";
+        private const string dataFilePath = Constants.PACKER_TEST_FILE_PATH;                        // Use the test/mock file for testing
         private DataFile dataFileContent = new DataFile();
 
         [Fact]
@@ -40,7 +40,7 @@ namespace com.mobiquity.packer.test
         public void DataFileParseAllLinesSuccessfully()
         {
             // Arrange                      
-            var dataFileContent = new MockPackerRepository(dataFilePath).GetParsedFileContent();
+            var dataFileContent = new MockPackerRepository(dataFilePath).GetParsedFileContent_OLD();
             int lineNumber = 1;
             bool parseSuccessfully = true;
 
@@ -89,7 +89,7 @@ namespace com.mobiquity.packer.test
             if (useMockData)
             {
                 // Return Mock repository data
-                return new MockPackerRepository(dataFilePath).GetParsedFileContent();
+                return new MockPackerRepository(dataFilePath).GetParsedFileContent_OLD();
             }
             else
             {

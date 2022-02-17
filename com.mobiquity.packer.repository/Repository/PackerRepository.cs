@@ -17,43 +17,34 @@ namespace com.mobiquity.packer.repository
 
         public string ReadRawFileContent()
         {
-            return DataService.ReadAllDataInFile(thisFilePath);
+            return DataService.ReadAllRawDataInFile(thisFilePath);
         }
 
-        public DataFile GetParsedFileContent()
-        {
-            bool fileParsedSuccessfully = GetAndParseFileContent();
 
-            if (fileParsedSuccessfully)
-            {
-                return new DataFile()
-                {
-                    DataLines = thisDataLines,
-                    FilePath = thisFilePath
-                };
-            }
-
-            return new DataFile();                           // TODO - return error code
-        }
-
-        #region Private methods
-        private bool GetAndParseFileContent()
+        public DataFile GetParsedFileContent(string[]? unitTestFileContent = null)
         {
             bool fileParseSuccessfull = true;
+            string[] fileLines = unitTestFileContent;
             int lineCounter = 1;
 
-            string[] dataLines = DataService.RetrieveDataFileContent(thisFilePath);     // Retrieve the content of the data file as separate lines
+            // To allow unit testing allow this method to receive directly a string
+            // for testing purchases
+            //
+            if (unitTestFileContent == null || unitTestFileContent[0] == null)
+                fileLines = GetFileContentDataLines();                                  // Get datalines from the input file
+            else
+                fileLines = unitTestFileContent;                                            // Use dataline pass into from unit test
 
-            try
+            foreach (var line in fileLines)
             {
-                foreach (string line in dataLines)
+                // Get the allowed package weight
+                allowedPackageWeight = GetAllowedPackageWeight(line);
+
+                // Get the Item(s) for the test case (line)
+                var testCaseItems = GetAndParseItemsInTestCase(line);
+
+                if (testCaseItems.Count > 0)
                 {
-                    // Get the allowed package weight
-                    allowedPackageWeight = GetAllowedPackageWeight(line);
-
-                    // Get the Item(s)
-                    var testCaseItems = GetListOfItemsInTestCase(line);
-
                     // Add the new line
                     thisDataLines.Add(new DataLine
                     {
@@ -64,10 +55,55 @@ namespace com.mobiquity.packer.repository
 
                     lineCounter++;
                 }
+                else
+                {
+                    fileParseSuccessfull = false;
+                    break;                                          // For now do not continue with the rest of the file... 
+                }
             }
-            catch (Exception)
+
+            if (fileParseSuccessfull)
             {
-                throw;
+                return new DataFile()
+                {
+                    DataLines = thisDataLines,
+                    FilePath = thisFilePath
+                };
+            }
+
+            return new DataFile();
+        }
+
+        #region Private methods
+        private string[] GetFileContentDataLines()
+        {
+            return DataService.RetrieveDataFileContent(thisFilePath);     // Retrieve the content of the data file as separate lines
+        }
+
+        private bool GetAndParseCompleteFileContent()
+        {
+            bool fileParseSuccessfull = true;
+            int lineCounter = 1;
+
+            string[] dataLines = DataService.RetrieveDataFileContent(thisFilePath);     // Retrieve the content of the data file as separate lines
+
+            foreach (string line in dataLines)
+            {
+                // Get the allowed package weight
+                allowedPackageWeight = GetAllowedPackageWeight(line);
+
+                // Get the Item(s)
+                var testCaseItems = GetAndParseItemsInTestCase(line);
+
+                // Add the new line
+                thisDataLines.Add(new DataLine
+                {
+                    LineNumber = lineCounter,
+                    PackageWeight = allowedPackageWeight,
+                    Items = testCaseItems
+                });
+
+                lineCounter++;
             }
 
             return fileParseSuccessfull;                // TODO - return breaking parse point details
@@ -84,7 +120,7 @@ namespace com.mobiquity.packer.repository
             return packageAllowedWeight;
         }
 
-        private List<DataItem> GetListOfItemsInTestCase(string dataLine)
+        private List<DataItem> GetAndParseItemsInTestCase(string dataLine)
         {
             int index = 0;
             decimal weight = 0;
@@ -108,7 +144,7 @@ namespace com.mobiquity.packer.repository
 
                 _ = Int32.TryParse(x, out index);
                 _ = Decimal.TryParse(y, out weight);                                    // TODO - confirm culture will not cause side effects (cvdw - 15/2/2022)
-                _ = Int32.TryParse(z, out cost);     
+                _ = Int32.TryParse(z, out cost);
 
                 DataItem i = new DataItem
                 {

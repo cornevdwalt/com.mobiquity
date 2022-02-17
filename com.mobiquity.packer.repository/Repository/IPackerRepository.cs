@@ -4,7 +4,7 @@ namespace com.mobiquity.packer.repository
 {
     public interface IPackerRepository
     {
-        DataFile GetParsedFileContent();
+        DataFile GetParsedFileContent(string[]? dataFileContent = null);
         string ReadRawFileContent();
     }
 }

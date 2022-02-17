@@ -18,7 +18,7 @@ namespace com.mobiquity.packer.repository
             return fileContent;
         }
 
-        public DataFile GetParsedFileContent()
+        public DataFile GetParsedFileContent_OLD()
         {
             #region Mock Items
             var mockItemA = new DataItem
@@ -82,6 +82,11 @@ namespace com.mobiquity.packer.repository
             result.DataLines.Add(mockLineC);
 
             return result;
+        }
+
+        public DataFile GetParsedFileContent(string[]? dataFileContent = null)
+        {
+            throw new NotImplementedException();
         }
     }
 }

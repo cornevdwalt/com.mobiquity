@@ -6,7 +6,7 @@ namespace com.mobiquity.packer.test
 {
     public class DataLineTests
     {
-        private const string dataFilePath = "";
+        private const string dataFilePath = Constants.PACKER_TEST_FILE_PATH;                        // Use the test/mock file for testing
         private const int allowedPackageWeight = 100;
         private const int allowedItemWeight = 100;
         private const int allowedItemCost = 100;
@@ -127,7 +127,7 @@ namespace com.mobiquity.packer.test
             if (useMockData)
             {
                 // Return Mock repository data
-                return new MockPackerRepository(dataFilePath).GetParsedFileContent();
+                return new MockPackerRepository(dataFilePath).GetParsedFileContent_OLD();
             }
             else
             {

@@ -7,30 +7,33 @@ namespace com.mobiquity.packer.api
 {
     public class PackerService : IPackerService
     {
-        //private IPackerRepository _packerRepositoryService;         // Not read-only
-
-        public string ReadAndProcessPackerData(string filePath)
+        public string ReadAndProcessPackerData(string filePath, string unitTestDataLine = null)
         {
             string results = string.Empty;
+            DataFile data = new DataFile();
+            string[] testLineDirectly = new string[1];
 
-            var packerRepository = new PackerRepository(filePath);                  //  need to change to di
+            // Get the data file content  
+            var packerRepository = new PackerRepository(filePath);                                              //  need to change to di
 
-            // Get the data file content
-            var data = packerRepository.GetParsedFileContent();
+            if (unitTestDataLine != null) testLineDirectly[0] = unitTestDataLine;    // For unit testing allow this method to receive directly an input dataline   
+            data = packerRepository.GetParsedFileContent(testLineDirectly);
 
-            // Process the information and generate the output
-            results = ProcessPackerDataAsync(data).Result;                          // todo - check this first...
+            // Confirm that the data was available
+            if (data != null)
+            {
+                // Process the information and generate the output
+                results = ProcessPackerDataAsync(data).Result;                                                  // todo - for now force sync
+            }
+            else
+            {
+                // Write out exeption to file (todo)
+
+                throw new Exception("The Packer input file was not available for processing");
+            }
 
             return results;
         }
-
-        //public string ReadAndProcessPackerData(string filePath, IPackerRepository packerRepository)
-        //{
-        //    //_packerRepositoryService = packerRepository;
-
-        //    return filePath;
-        //}
-
 
         private async Task<string> ProcessPackerDataAsync(DataFile dataFileContent)
         {
@@ -44,7 +47,6 @@ namespace com.mobiquity.packer.api
             foreach (var line in dataFileContent.DataLines)
             {
                 #region Initialize for new data line
-                //selectedItems = new List<SelectedItem>();
                 itemsSelectedForLine = string.Empty;
                 totalWeightForItemsSelected = 0;
                 totalCostForItemsSelected = 0;
@@ -104,13 +106,15 @@ namespace com.mobiquity.packer.api
             {
                 output.Add(line.Items);
             };
-            await DataService.WritePackerOutputFile(output);                // Write out the output Async
+            await DataService.WritePackerOutputFile(output);                // Write out the output file (Async)
 
             // Return the final results to calling clients
-            foreach (var line in selectedItems) { results += line.Items + System.Environment.NewLine;};
+            foreach (var line in selectedItems) 
+            { 
+                results += line.Items + System.Environment.NewLine;
+            };
             return results;
         }
-
 
         private class SelectedItem : IEnumerable
         {
@@ -118,17 +122,17 @@ namespace com.mobiquity.packer.api
             public decimal TotalWeight { get; set; }
             public int TotalCost { get; set; }
 
-            List<SelectedItem> mylist = new List<SelectedItem>();
+            List<SelectedItem> itemList = new List<SelectedItem>();
 
             public SelectedItem this[int index]
             {
-                get { return mylist[index]; }
-                set { mylist.Insert(index, value); }
+                get { return itemList[index]; }
+                set { itemList.Insert(index, value); }
             }
 
             public IEnumerator<SelectedItem> GetEnumerator()
             {
-                return mylist.GetEnumerator();
+                return itemList.GetEnumerator();
             }
 
             IEnumerator IEnumerable.GetEnumerator()
