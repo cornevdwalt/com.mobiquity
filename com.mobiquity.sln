@@ -11,7 +11,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "com.mobiquity.packer.consol
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "com.mobiquity.packer.test", "com.mobiquity.packer.test\com.mobiquity.packer.test.csproj", "{A23316E6-68F3-4E27-AD81-ECAB658DA090}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "com.mobiquity.packer.api", "com.mobiquity.packer.api\com.mobiquity.packer.api.csproj", "{643A30F2-6331-4A76-A48D-198631BDE299}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "com.mobiquity.packer.api", "com.mobiquity.packer.api\com.mobiquity.packer.api.csproj", "{643A30F2-6331-4A76-A48D-198631BDE299}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "com.mobiquity.packer.data", "com.mobiquity.packer.data\com.mobiquity.packer.data.csproj", "{45A60993-4970-46EA-BECB-6BC2C8067EF2}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -39,6 +41,10 @@ Global
 		{643A30F2-6331-4A76-A48D-198631BDE299}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{643A30F2-6331-4A76-A48D-198631BDE299}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{643A30F2-6331-4A76-A48D-198631BDE299}.Release|Any CPU.Build.0 = Release|Any CPU
+		{45A60993-4970-46EA-BECB-6BC2C8067EF2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{45A60993-4970-46EA-BECB-6BC2C8067EF2}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{45A60993-4970-46EA-BECB-6BC2C8067EF2}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{45A60993-4970-46EA-BECB-6BC2C8067EF2}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

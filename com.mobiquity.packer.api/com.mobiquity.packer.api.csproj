@@ -11,6 +11,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\com.mobiquity.packer.data\com.mobiquity.packer.data.csproj" />
     <ProjectReference Include="..\com.mobiquity.packer.repository\com.mobiquity.packer.domain.csproj" />
   </ItemGroup>
 

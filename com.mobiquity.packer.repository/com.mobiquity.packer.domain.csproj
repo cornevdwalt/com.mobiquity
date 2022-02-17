@@ -10,4 +10,8 @@
     <PackageReference Include="System.Collections" Version="4.3.0" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\com.mobiquity.packer.data\com.mobiquity.packer.data.csproj" />
+  </ItemGroup>
+
 </Project>
