@@ -8,6 +8,6 @@ namespace com.mobiquity.packer.test
 {
     public static class Constants
     {
-        public const string PACKER_TEST_FILE_PATH = @"c:\temp\example_input.txt";
+        public const string PACKER_TEST_FILE_PATH = @"c:\temp\example_input.txt";           // example_input_err  example_input          
     }
 }

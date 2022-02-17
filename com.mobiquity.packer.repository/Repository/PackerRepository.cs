@@ -31,34 +31,42 @@ namespace com.mobiquity.packer.repository
             // for testing purchases
             //
             if (unitTestFileContent == null || unitTestFileContent[0] == null)
-                fileLines = GetFileContentDataLines();                                  // Get datalines from the input file
+                fileLines = GetFileContentDataLines();                                      // Get datalines from the input file
             else
                 fileLines = unitTestFileContent;                                            // Use dataline pass into from unit test
 
-            foreach (var line in fileLines)
+
+            // Validate the content of the file (confirming there is at least one line)
+            var validateFile = PackerFileValidator.DataFileNeedsAtLeastOneLine(fileLines);
+            fileParseSuccessfull = validateFile == string.Empty;
+
+            if(fileParseSuccessfull)
             {
-                // Get the allowed package weight
-                allowedPackageWeight = GetAllowedPackageWeight(line);
-
-                // Get the Item(s) for the test case (line)
-                var testCaseItems = GetAndParseItemsInTestCase(line);
-
-                if (testCaseItems.Count > 0)
+                foreach (var line in fileLines)
                 {
-                    // Add the new line
-                    thisDataLines.Add(new DataLine
+                    // Get the allowed package weight
+                    allowedPackageWeight = GetAllowedPackageWeight(line);
+
+                    // Get the Item(s) for the test case (line)
+                    var testCaseItems = GetAndParseItemsInTestCase(line);
+
+                    if (testCaseItems.Count > 0)
                     {
-                        LineNumber = lineCounter,
-                        PackageWeight = allowedPackageWeight,
-                        Items = testCaseItems
-                    });
+                        // Add the new line
+                        thisDataLines.Add(new DataLine
+                        {
+                            LineNumber = lineCounter,
+                            PackageWeight = allowedPackageWeight,
+                            Items = testCaseItems
+                        });
 
-                    lineCounter++;
-                }
-                else
-                {
-                    fileParseSuccessfull = false;
-                    break;                                          // For now do not continue with the rest of the file... 
+                        lineCounter++;
+                    }
+                    else
+                    {
+                        fileParseSuccessfull = false;
+                        break;                                          // For now do not continue with the rest of the file... 
+                    }
                 }
             }
 
@@ -70,8 +78,20 @@ namespace com.mobiquity.packer.repository
                     FilePath = thisFilePath
                 };
             }
+            else
+            {
+                // Add the new line containing the error code
+                thisDataLines.Add(new DataLine
+                {
+                    LineNumber = 0,
+                });
 
-            return new DataFile();
+                return new DataFile() 
+                { 
+                    FilePath = thisFilePath,
+                    DataLines = thisDataLines,
+                };
+            }
         }
 
         #region Private methods

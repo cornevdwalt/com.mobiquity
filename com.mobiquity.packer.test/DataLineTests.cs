@@ -58,10 +58,6 @@ namespace com.mobiquity.packer.test
         [Fact]
         public void NumberOfItemsinDataLineLessEqualTo15()
         {
-            //
-            // TODO - Confirm this is a constrain (cvdw) - 15/2/2022
-            //
-
             // Arrange 
             bool itemsInRange = false;
 

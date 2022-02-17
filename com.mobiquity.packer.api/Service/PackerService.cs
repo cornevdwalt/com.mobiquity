@@ -14,22 +14,17 @@ namespace com.mobiquity.packer.Packer
             string[] testLineDirectly = new string[1];
 
             // Get the data file content  
+            // For unit testing allow this method to receive directly an input dataline  
+            //
             var packerRepository = new PackerRepository(filePath);                                              //  need to change to di
-
-            if (unitTestDataLine != null) testLineDirectly[0] = unitTestDataLine;    // For unit testing allow this method to receive directly an input dataline   
+            if (unitTestDataLine != null) 
+                testLineDirectly[0] = unitTestDataLine;    
             data = packerRepository.GetParsedFileContent(testLineDirectly);
 
-            // Confirm that the data was available
             if (data != null)
             {
                 // Process the information and generate the output
                 results = ProcessPackerDataAsync(data).Result;                                                  // todo - for now force sync
-            }
-            else
-            {
-                // Write out exeption to file (todo)
-
-                throw new Exception("The Packer input file was not available for processing");
             }
 
             return results;
@@ -67,7 +62,7 @@ namespace com.mobiquity.packer.Packer
 
 
 
-                var test = filteringQuery.ToList();         // testing
+                //var test = filteringQuery.ToList();         // for testing only (cvdw)
 
 
                 // Loop through all the items in the test case and keep including items in the package
