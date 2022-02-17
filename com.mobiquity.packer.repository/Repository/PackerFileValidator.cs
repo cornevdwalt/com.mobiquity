@@ -9,14 +9,14 @@ namespace com.mobiquity.packer.repository
 {
     public static class PackerFileValidator
     {
-        public static string DataFileIsNotEmpty(string dataFileContent)
+        public static int DataFileIsNotEmpty(string dataFileContent)
         {
             try
             {
                 bool hasContent = dataFileContent.Length > 0;
 
                 if (hasContent)
-                    return String.Empty;
+                    return 0;
                 else
                     return PACKERFILE_VALIDATION_CODES.DataFileIsNotEmpty;
             }
@@ -27,7 +27,7 @@ namespace com.mobiquity.packer.repository
             
         }
 
-        public static string DataFileNeedsAtLeastOneLine(string[] dataLines)
+        public static int DataFileNeedsAtLeastOneLine(string[] dataLines)
         {
             try
             {
@@ -35,7 +35,7 @@ namespace com.mobiquity.packer.repository
                 bool hasItems = dataLines.Count() > 0;
 
                 if (hasItems)
-                    return String.Empty;
+                    return 0;
                 else
                     return PACKERFILE_VALIDATION_CODES.DataFileNeedsAtLeastOneLine;
             }
@@ -45,7 +45,7 @@ namespace com.mobiquity.packer.repository
             }
         }
 
-        public static string DataFileNeedsAtLeastOneLine(DataFile dataFileContent)
+        public static int DataFileNeedsAtLeastOneLine(DataFile dataFileContent)
         {
             try
             {
@@ -56,7 +56,7 @@ namespace com.mobiquity.packer.repository
                 bool hasItems = firstDataLine.Items.Count > 0;
 
                 if (hasItems)
-                    return String.Empty;
+                    return 0;
                 else
                     return PACKERFILE_VALIDATION_CODES.DataFileNeedsAtLeastOneLine;
             }

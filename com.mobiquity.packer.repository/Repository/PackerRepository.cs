@@ -37,8 +37,8 @@ namespace com.mobiquity.packer.repository
 
 
             // Validate the content of the file (confirming there is at least one line)
-            var validateFile = PackerFileValidator.DataFileNeedsAtLeastOneLine(fileLines);
-            fileParseSuccessfull = validateFile == string.Empty;
+            var validateFileCheckValue = PackerFileValidator.DataFileNeedsAtLeastOneLine(fileLines);
+            fileParseSuccessfull = validateFileCheckValue == 0;
 
             if(fileParseSuccessfull)
             {
@@ -83,7 +83,7 @@ namespace com.mobiquity.packer.repository
                 // Add the new line containing the error code
                 thisDataLines.Add(new DataLine
                 {
-                    LineNumber = 0,
+                    LineNumber = validateFileCheckValue,                        // Line number contains the error code
                 });
 
                 return new DataFile() 

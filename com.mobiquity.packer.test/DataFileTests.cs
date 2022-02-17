@@ -16,10 +16,10 @@ namespace com.mobiquity.packer.test
             string dataFileContent = GetPackFileRawData();
 
             // Act
-            string testResult = PackerFileValidator.DataFileIsNotEmpty(dataFileContent);  
+            int testResult = PackerFileValidator.DataFileIsNotEmpty(dataFileContent);  
 
             // Assert
-            Assert.Equal(string.Empty, testResult);
+            Assert.Equal(0, testResult);
         }
 
         [Fact]
@@ -29,10 +29,10 @@ namespace com.mobiquity.packer.test
             var dataFileContent = GetPackFileData();
 
             // Act
-            string testResult = PackerFileValidator.DataFileNeedsAtLeastOneLine(dataFileContent);
+            int testResult = PackerFileValidator.DataFileNeedsAtLeastOneLine(dataFileContent);
 
             // Assert
-            Assert.Equal(string.Empty, testResult);
+            Assert.Equal(0, testResult);
         }
 
         [Fact]
