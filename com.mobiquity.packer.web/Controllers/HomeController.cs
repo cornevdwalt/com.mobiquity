@@ -1,4 +1,5 @@
-﻿using com.mobiquity.web.Models;
+﻿using com.mobiquity.packer.api;
+using com.mobiquity.web.Models;
 using Microsoft.AspNetCore.Mvc;
 using System.Diagnostics;
 
@@ -7,11 +8,12 @@ namespace com.mobiquity.web.Controllers
     public class HomeController : Controller
     {
         private readonly ILogger<HomeController> _logger;
-        //private readonly IDataFile<HomeController> _dataFile;
+        private readonly IPacker _packerService;
 
-        public HomeController(ILogger<HomeController> logger)
+        public HomeController(ILogger<HomeController> logger, IPacker packerService)
         {
             _logger = logger;
+            _packerService = packerService;
         }
 
         public IActionResult ParseFile()
@@ -23,20 +25,11 @@ namespace com.mobiquity.web.Controllers
         [HttpPost]
         public IActionResult ParseFile(DataFileViewModel dataFile)
         {
-            //var items = _shoppingCart.GetShoppingCartItems();
-            //_shoppingCart.ShoppingCartItems = items;
-
-            //if (_shoppingCart.ShoppingCartItems.Count == 0)
-            //{
-            //    ModelState.AddModelError("", "Your cart is empty, add some pies first");
-            //}
-
-            //if (ModelState.IsValid)
-            //{
-            //    _orderRepository.CreateOrder(order);
-            //    _shoppingCart.ClearCart();
-            //    return RedirectToAction("CheckoutComplete");
-            //}
+            if (ModelState.IsValid)
+            {
+                dataFile.ParseResults = _packerService.Pack(dataFile.FilePath);
+                ViewBag.Response = dataFile.ParseResults;
+            }
 
             return View(dataFile);
         }

@@ -1,6 +1,10 @@
 ﻿using com.mobiquity.packer.api;
 using Microsoft.Extensions.DependencyInjection;
 
+/// <summary>
+/// TEST DATA FILE PATH : "c:\temp\example_input.txt"
+/// </summary>
+
 int row = 0;
 string results;
 

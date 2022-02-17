@@ -28,15 +28,23 @@
         {
             return System.IO.File.ReadAllText(filePath);                              // TODO - change to asynch
         }
-
         public static async Task WritePackerOutputFile(List<string> output)
         {
-            using StreamWriter file = new(@"c:\temp\PackerOutput.txt", append: true);
+            using StreamWriter file = new(Constants.PACKER_OUTPUT_PATH, append: true);
+
             await file.WriteLineAsync("-- " + DateTime.Now + " ----------------------------------------------------------" );
 
             foreach (string line in output)
             {
                 await file.WriteLineAsync(line);
+            }
+        }
+        public static async Task WritePackerError(string output)
+        {
+            using StreamWriter file = new(Constants.PACKER_ERRORFILE_PATH, append: true);
+            {
+                await file.WriteLineAsync("-- " + DateTime.Now + " ----------------------------------------------------------");
+                await file.WriteLineAsync(output);
             }
         }
     }
