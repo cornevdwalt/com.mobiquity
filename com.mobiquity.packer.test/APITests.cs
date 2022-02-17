@@ -39,7 +39,7 @@ namespace com.mobiquity.packer.test
 
             // Assert
             Assert.True(hasContent, "Unit test for case one did not return any value and cannot be empty");
-            Assert.Contains(results, "4");
+            Assert.Equal("4", results);
         }
 
         [Theory]
@@ -55,7 +55,7 @@ namespace com.mobiquity.packer.test
 
             // Assert
             Assert.True(hasContent, "Unit test for case two did not return any value and cannot be empty");
-            Assert.Contains(results, "-");
+            Assert.Equal("-", results);
         }
 
         [Theory]
@@ -71,7 +71,7 @@ namespace com.mobiquity.packer.test
 
             // Assert
             Assert.True(hasContent, "Unit test for case three did not return any value and cannot be empty");
-            Assert.Contains(results, "2,7");
+            Assert.Equal("2,4", results);
         }
 
         [Theory]
@@ -87,7 +87,7 @@ namespace com.mobiquity.packer.test
 
             // Assert
             Assert.True(hasContent, "Unit test for case four did not return any value and cannot be empty");
-            Assert.Contains(results, "8,9");
+            Assert.Equal("8,9", results);
         }
 
         private static string CallPackerAPI(bool useMockData = false)

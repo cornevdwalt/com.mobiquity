@@ -40,9 +40,11 @@ namespace com.mobiquity.packer.api
             string results = string.Empty;
 
             List<SelectedItem> selectedItems = new List<SelectedItem>();
+
             string itemsSelectedForLine = string.Empty;
             decimal totalWeightForItemsSelected = 0;
             int totalCostForItemsSelected = 0;
+            List<int> prizesForItemsForLineAlreadySelected = new List<int>();
 
             foreach (var line in dataFileContent.DataLines)
             {
@@ -50,6 +52,7 @@ namespace com.mobiquity.packer.api
                 itemsSelectedForLine = string.Empty;
                 totalWeightForItemsSelected = 0;
                 totalCostForItemsSelected = 0;
+                prizesForItemsForLineAlreadySelected = new List<int>();
                 #endregion
 
                 // Filter the items in the line for potential candidates
@@ -57,7 +60,7 @@ namespace com.mobiquity.packer.api
                 var filteringQuery = (from item in line.Items
                                       where item.Weight <= Constrains.MAX_ITEM_COST      // Exclude items weighting more than allowed weight  
                                              && item.Cost <= Constrains.MAX_ITEM_COST    // Exclude items costing more than allowed cost 
-                                             && item.Weight <= line.PackageWeight        // Excluding items weigthing more than the allowed package weight
+                                             && line.PackageWeight >= item.Weight        // Excluding items weigthing more than the allowed package weight
                                       orderby item.Cost descending,                      // Looking for items costing the most
                                               item.Weight                                // then looking for packages that weight the less first    
                                       select item).Take(15);                             // Considering only up to 15 items
@@ -73,29 +76,46 @@ namespace com.mobiquity.packer.api
                 //
                 foreach (var candidate in filteringQuery)
                 {
-                    // Check total weight for the package already selected
-                    decimal checkWeight = totalWeightForItemsSelected + candidate.Weight;
-                    if (checkWeight > Constrains.MAX_PACKAGE_WEIGHT || checkWeight > line.PackageWeight) break;
-
-                    // Add this item to the package list
+                    // Check if we have not already selected a simular item with the same cost/prize
                     //
-                    if (itemsSelectedForLine == "")
-                        itemsSelectedForLine += candidate.Index + " ";
-                    else
-                    {
-                        itemsSelectedForLine = itemsSelectedForLine.Remove(itemsSelectedForLine.Length - 1, 1);     // Remove last space
-                        itemsSelectedForLine += "," + candidate.Index + " ";                                        // Add new Item index
+                    bool costAlreadyIncluded = false;
+                    foreach (var i in prizesForItemsForLineAlreadySelected)
+                    { 
+                        if (candidate.Cost == i)
+                        {
+                            costAlreadyIncluded = true;
+                            break;
+                            }
                     }
+                    if (!costAlreadyIncluded)
+                    {
+                        // Check total weight for the package already selected and first confirm package is not over-weighted
+                        decimal checkWeight = totalWeightForItemsSelected + candidate.Weight;
+                        if (checkWeight > Constrains.MAX_PACKAGE_WEIGHT || checkWeight > line.PackageWeight) 
+                            break;
 
-                    totalWeightForItemsSelected += candidate.Weight;
-                    totalCostForItemsSelected += candidate.Cost;
+                        #region Add this item to the items for this line
+                        if (itemsSelectedForLine == "")
+                            itemsSelectedForLine += candidate.Index + " ";
+                        else
+                        {
+                            itemsSelectedForLine = itemsSelectedForLine.Remove(itemsSelectedForLine.Length - 1, 1);     // Remove last space
+                            itemsSelectedForLine += "," + candidate.Index + " ";                                        // Add new Item index
+                        }
+
+                        totalWeightForItemsSelected += candidate.Weight;
+                        totalCostForItemsSelected += candidate.Cost;
+                        prizesForItemsForLineAlreadySelected.Add(candidate.Cost);
+                        #endregion
+                    }
                 }
 
+                // Add the item to the test case(s) for the final results
                 selectedItems.Add(new SelectedItem
                 {
-                    Items = String.IsNullOrEmpty(itemsSelectedForLine) ? "-" : itemsSelectedForLine,
+                    ItemsListToDisplay = String.IsNullOrEmpty(itemsSelectedForLine) ? "-" : itemsSelectedForLine,
                     TotalWeight = totalWeightForItemsSelected,
-                    TotalCost = totalCostForItemsSelected
+                    TotalCost = totalCostForItemsSelected,
                 });
             }
 
@@ -104,23 +124,21 @@ namespace com.mobiquity.packer.api
             List<string> output = new List<string>();
             foreach (var line in selectedItems)
             {
-                output.Add(line.Items);
+                output.Add(line.ItemsListToDisplay);
             };
             await DataService.WritePackerOutputFile(output);                // Write out the output file (Async)
 
             // Return the final results to calling clients
-            foreach (var line in selectedItems) 
-            { 
-                results += line.Items + System.Environment.NewLine;
-            };
+            foreach (var line in selectedItems) { results += line.ItemsListToDisplay + System.Environment.NewLine;};      
             return results;
         }
 
         private class SelectedItem : IEnumerable
         {
-            public string Items { get; set; }
+            public string ItemsListToDisplay { get; set; }
             public decimal TotalWeight { get; set; }
             public int TotalCost { get; set; }
+            public List<decimal>? SelectedItemIndexes { get; set; }
 
             List<SelectedItem> itemList = new List<SelectedItem>();
 
