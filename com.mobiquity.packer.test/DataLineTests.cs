@@ -1,4 +1,5 @@
 using com.mobiquity.packer.domain;
+using com.mobiquity.packer.Packer;
 using com.mobiquity.packer.repository;
 using Xunit;
 
@@ -8,8 +9,6 @@ namespace com.mobiquity.packer.test
     {
         private const string dataFilePath = Constants.PACKER_TEST_FILE_PATH;                        // Use the test/mock file for testing
         private const int allowedPackageWeight = 100;
-        private const int allowedItemWeight = 100;
-        private const int allowedItemCost = 100;
 
         private int lineNumber = 0;
         private DataFile dataFileContent = new DataFile();
@@ -17,19 +16,18 @@ namespace com.mobiquity.packer.test
         [Fact]
         public void DataLineTotalWeightGreaterThanZero()
         {
-            bool totalPackageWeightGreaterThanZero = false;
-
-            // Arrange                      
+            // Arrange
+            bool testPassed = false;
             var dataFileContent = GetPackFileData();
 
-            // Act
             foreach (var thisLine in dataFileContent.DataLines)                                     // Loop through all available lines and check each line 
             {
-                // Confirm the package weight exists
-                totalPackageWeightGreaterThanZero = thisLine.PackageWeight > 0;
+                // Act
+                string testResult = PackerLineValidator.DataLineTotalWeightGreaterThanZero(thisLine);
 
-                // Assert
-                Assert.True(totalPackageWeightGreaterThanZero, $"The total weight of a package allowed must be greater than zero. Line# {lineNumber}");
+                testPassed = testResult == string.Empty;
+
+                Assert.True(testPassed, $"The total weight of a package allowed must be greater than zero. Line# {lineNumber}. Error code return = {testResult}");
 
                 lineNumber++;
             }
@@ -38,18 +36,18 @@ namespace com.mobiquity.packer.test
         [Fact]
         public void DataLineHasAtLeastOneItem()
         {
-            // Arrange 
-            bool atLeastOneItemInLine = false;
-
+            // Arrange
+            bool testPassed = false;
             var dataFileContent = GetPackFileData();
 
-            // Act
             foreach (var thisLine in dataFileContent.DataLines)                                     // Loop through all available lines and check each line 
             {
-                atLeastOneItemInLine = thisLine.Items.Count > 0;
+                // Act
+                string testResult = PackerLineValidator.DataLineHasAtLeastOneItem(thisLine);
 
-                // Assert
-                Assert.True(atLeastOneItemInLine, $"There must be at least one item in a package. Line# {lineNumber}");
+                testPassed = testResult == string.Empty;
+
+                Assert.True(testPassed, $"There must be at least one item in a package. Line# {lineNumber}. Error code return = {testResult}");
 
                 lineNumber++;
             }
@@ -58,18 +56,18 @@ namespace com.mobiquity.packer.test
         [Fact]
         public void NumberOfItemsinDataLineLessEqualTo15()
         {
-            // Arrange 
-            bool itemsInRange = false;
-
+            // Arrange
+            bool testPassed = false;
             var dataFileContent = GetPackFileData();
 
-            // Act
             foreach (var thisLine in dataFileContent.DataLines)                                     // Loop through all available lines and check each line 
             {
-                itemsInRange = thisLine.Items.Count <= 15;
+                // Act
+                string testResult = PackerLineValidator.NumberOfItemsinDataLineLessEqualTo15(thisLine);
 
-                // Assert
-                Assert.True(itemsInRange, $"There cannot be more than 15 items in a single package. Line# {lineNumber}");
+                testPassed = testResult == string.Empty;
+
+                Assert.True(testPassed, $"There cannot be more than 15 items in a single package. Line# {lineNumber}. Error code return = {testResult}");
 
                 lineNumber++;
             }
@@ -78,43 +76,43 @@ namespace com.mobiquity.packer.test
         [Fact]
         public void TotalPackageWeightLessEqualTo100()
         {
-            // Arrange 
+            // Arrange
+            bool testPassed = false;
             var dataFileContent = GetPackFileData();
 
-            // Act
             foreach (var thisLine in dataFileContent.DataLines)                                     // Loop through all available lines and check each line 
             {
-                // Assert
-                Assert.True(thisLine.PackageWeight <= allowedPackageWeight, $"The total weight of a package may not be more then {allowedPackageWeight}. Line# {lineNumber}");
+                // Act
+                string testResult = PackerLineValidator.TotalPackageWeightLessEqualTo100(thisLine);
+
+                testPassed = testResult == string.Empty;
+
+                Assert.True(testPassed, $"The total weight of a package may not be more then {allowedPackageWeight}. Line# {lineNumber}. Error code return = {testResult}");
 
                 lineNumber++;
             }
         }
 
         [Fact]
-        public void ItemWeightAndCostLessEqualTo100()
+        public void LineItemsNotValid()
         {
-            // Arrange 
-
+            // Arrange
+            bool testPassed = false;
             var dataFileContent = GetPackFileData();
 
-            // Act
             foreach (var thisLine in dataFileContent.DataLines)                                     // Loop through all available lines and check each line 
             {
                 // Confirm all the items in the test case are valid 
                 //
                 foreach (var thisItem in thisLine.Items)
                 {
-                    Assert.True(thisItem.Index > 0, $"The datafile needs to contains well formatted data to parse succesfully and the item needs an index in the test case. The line containing the invalid data is in line# {lineNumber}");
+                    // Act
+                    string testResult = PackerLineValidator.LineItemsNotValid(thisLine);
 
-                    Assert.True(thisItem.Weight > 0, $"The datafile needs to contains well formatted data to parse succesfully and the item needs a weight in the test case. The line containing the invalid data is in line# {lineNumber}");
-                    Assert.True(thisItem.Weight <= allowedItemWeight, $"The datafile needs to contains well formatted data to parse succesfully and the item needs a weight less or equal than 100 the test case. The line containing the invalid data is in line# {lineNumber}");
+                    testPassed = testResult == string.Empty;
 
-                    Assert.True(thisItem.Cost > 0, $"The datafile needs to contains well formatted data to parse succesfully and the item needs a cost in the test case. The line containing the invalid data is in line# {lineNumber}");
-                    Assert.True(thisItem.Cost <= allowedItemCost, $"The datafile needs to contains well formatted data to parse succesfully and the item needs a cost less or equal than 100 the test case. The line containing the invalid data is in line# {lineNumber}");
+                    Assert.True(testPassed, $"The datafile and items needs to contains well formatted data to parse succesfully for each test case. Line# {lineNumber}. Error code return = {testResult}");
                 }
-
-                lineNumber++;
             }
         }
 
