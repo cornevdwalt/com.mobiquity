@@ -64,13 +64,21 @@ namespace com.mobiquity.packer.Packer
 
                 if (lineValidatedSuccessfully)
                 {
-
-                    #region Initialize for new data line
+                    #region Initialization for new data line
                     itemsSelectedForLine = string.Empty;
                     totalWeightForItemsSelected = 0;
                     totalCostForItemsSelected = 0;
                     prizesForItemsForLineAlreadySelected = new List<int>();
                     #endregion
+
+                    // ----------------------------------------------------------------
+                    // Business rules for picking items for the package
+                    //
+                    // Only up to 15 items
+                    // and until total wight of parcel = 100
+                    //
+                    // Filer out any items cost/weight > 100
+                    // ----------------------------------------------------------------
 
                     // Filter the items in the line for potential candidates
                     //
@@ -78,13 +86,15 @@ namespace com.mobiquity.packer.Packer
                                           where item.Weight <= Constrains.MAX_ITEM_COST      // Exclude items weighting more than allowed weight  
                                                  && item.Cost <= Constrains.MAX_ITEM_COST    // Exclude items costing more than allowed cost 
                                                  && line.PackageWeight >= item.Weight        // Excluding items weigthing more than the allowed package weight
+
                                           orderby item.Cost descending,                      // Looking for items costing the most
-                                                  item.Weight                                // then looking for packages that weight the less first    
+                                                  item.Weight                                // then looking for items that weight less first
+                                                                                             // 
                                           select item).Take(15);                             // Considering only up to 15 items
 
 
 
-                    //var test = filteringQuery.ToList();         // for testing only (cvdw)
+                    var test = filteringQuery.ToList();         // for testing only (cvdw)
 
 
                     // Loop through all the items in the test case and keep including items in the package
@@ -106,7 +116,7 @@ namespace com.mobiquity.packer.Packer
                         }
                         if (!costAlreadyIncluded)
                         {
-                            // Check total weight for the package already selected and first confirm package is not over-weighted
+                            // Check that the total weight for the package is not over-weighted or more than allowed for this package
                             decimal checkWeight = totalWeightForItemsSelected + candidate.Weight;
                             if (checkWeight > Constrains.MAX_PACKAGE_WEIGHT || checkWeight > line.PackageWeight)
                                 break;
@@ -136,6 +146,13 @@ namespace com.mobiquity.packer.Packer
                     });
                 }
             }
+
+            // For unit testing the package pass the information to check results
+            //
+            // a) Only up to 15 items
+            // b) Not greather than max weight for packages
+            // c) Not greather than the allowed package weight
+
 
             // Save results to the text file and append the results to the output file (Async)
             List<string> output = new List<string>();

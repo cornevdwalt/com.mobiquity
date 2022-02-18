@@ -54,46 +54,6 @@ namespace com.mobiquity.packer.test
         }
 
         [Fact]
-        public void NumberOfItemsinDataLineLessEqualTo15()
-        {
-            // Arrange
-            bool testPassed = false;
-            var dataFileContent = GetPackFileData();
-
-            foreach (var thisLine in dataFileContent.DataLines)                                     // Loop through all available lines and check each line 
-            {
-                // Act
-                string testResult = PackerLineValidator.NumberOfItemsinDataLineLessEqualTo15(thisLine);
-
-                testPassed = testResult == string.Empty;
-
-                Assert.True(testPassed, $"There cannot be more than 15 items in a single package. Line# {lineNumber}. Error code return = {testResult}");
-
-                lineNumber++;
-            }
-        }
-
-        [Fact]
-        public void TotalPackageWeightLessEqualTo100()
-        {
-            // Arrange
-            bool testPassed = false;
-            var dataFileContent = GetPackFileData();
-
-            foreach (var thisLine in dataFileContent.DataLines)                                     // Loop through all available lines and check each line 
-            {
-                // Act
-                string testResult = PackerLineValidator.TotalPackageWeightLessEqualTo100(thisLine);
-
-                testPassed = testResult == string.Empty;
-
-                Assert.True(testPassed, $"The total weight of a package may not be more then {allowedPackageWeight}. Line# {lineNumber}. Error code return = {testResult}");
-
-                lineNumber++;
-            }
-        }
-
-        [Fact]
         public void LineItemsNotValid()
         {
             // Arrange
@@ -109,7 +69,7 @@ namespace com.mobiquity.packer.test
                     foreach (var thisItem in thisLine.Items)
                     {
                         // Act
-                        string testResult = PackerLineValidator.LineItemsNotValid(thisLine);
+                        string testResult = PackerLineValidator.LineItemsValidValues(thisLine);
 
                         testPassed = testResult == string.Empty;
 

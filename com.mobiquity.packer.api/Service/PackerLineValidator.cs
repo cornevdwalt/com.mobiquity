@@ -9,15 +9,21 @@ namespace com.mobiquity.packer.Packer
 {
     public static class PackerLineValidator
     {
+        // -----------------------------------------------------------------
+        // Validating the following business rules for the packer solution
+        //
+        // 1) Max weight of package <= 100
+        // 2) Max weight and cost of an item <= 100
+        //
+        // -----------------------------------------------------------------
+
         public static string ValidatePackerDataLine(DataLine thisDataLine)
         {
             string validationResults = string.Empty;
 
-            validationResults = DataLineTotalWeightGreaterThanZero(thisDataLine);
-            validationResults += DataLineHasAtLeastOneItem(thisDataLine);
-            validationResults += NumberOfItemsinDataLineLessEqualTo15(thisDataLine);
-            validationResults += TotalPackageWeightLessEqualTo100(thisDataLine);
-            validationResults += LineItemsNotValid(thisDataLine);
+            validationResults = DataLineHasAtLeastOneItem(thisDataLine);
+            validationResults += DataLineTotalWeightGreaterThanZero(thisDataLine);
+            validationResults += LineItemsValidValues(thisDataLine);
 
             return validationResults;
         }
@@ -67,49 +73,7 @@ namespace com.mobiquity.packer.Packer
             }
         }
 
-        public static string NumberOfItemsinDataLineLessEqualTo15(DataLine thisDataLine)
-        {
-            bool itemsInRange;
-
-            try
-            {
-                if (thisDataLine.Items == null) return "";       // Ignore if there are no items in this test case
-
-                itemsInRange = thisDataLine.Items.Count <= 15;
-
-                if (itemsInRange)
-                    return "";
-                else
-                    return PACKER_LINE_VALIDATION_CODES.NumberOfItemsinDataLineLessEqualTo15;
-            }
-            catch (Exception)
-            {
-                return PACKER_LINE_VALIDATION_CODES.NumberOfItemsinDataLineLessEqualTo15;
-            }
-        }
-
-        public static string TotalPackageWeightLessEqualTo100(DataLine thisDataLine)
-        {
-            bool dataFileContent;
-
-            try
-            {
-                if (thisDataLine.Items == null) return PACKER_LINE_VALIDATION_CODES.TotalPackageWeightLessEqualTo100;
-
-                dataFileContent = thisDataLine.PackageWeight <= Constrains.MAX_PACKAGE_WEIGHT;
-
-                if (dataFileContent)
-                    return "";
-                else
-                    return PACKER_LINE_VALIDATION_CODES.TotalPackageWeightLessEqualTo100;
-            }
-            catch (Exception)
-            {
-                return PACKER_LINE_VALIDATION_CODES.TotalPackageWeightLessEqualTo100;
-            }
-        }
-
-        public static string LineItemsNotValid(DataLine thisDataLine)
+        public static string LineItemsValidValues(DataLine thisDataLine)
         {
             bool dataFileContent;
             string itemErrorCode = string.Empty;
