@@ -31,7 +31,7 @@ namespace com.mobiquity.packer.Packer
 
             try
             {
-                if (thisDataLine == null) return PACKER_LINE_VALIDATION_CODES.DataLineTotalWeightGreaterThanZero;
+                if (thisDataLine.Items == null) return PACKER_LINE_VALIDATION_CODES.DataLineTotalWeightGreaterThanZero;
 
                 totalPackageWeightGreaterThanZero = totalPackageWeightGreaterThanZero = thisDataLine.PackageWeight > 0;
 
@@ -52,7 +52,7 @@ namespace com.mobiquity.packer.Packer
 
             try
             {
-                if (thisDataLine == null) return PACKER_LINE_VALIDATION_CODES.DataLineHasAtLeastOneItem;
+                if (thisDataLine.Items == null) return PACKER_LINE_VALIDATION_CODES.DataLineHasAtLeastOneItem;
 
                 atLeastOneItemInLine = thisDataLine.Items.Count > 0;
 
@@ -94,7 +94,7 @@ namespace com.mobiquity.packer.Packer
 
             try
             {
-                if (thisDataLine == null) return PACKER_LINE_VALIDATION_CODES.TotalPackageWeightLessEqualTo100;
+                if (thisDataLine.Items == null) return PACKER_LINE_VALIDATION_CODES.TotalPackageWeightLessEqualTo100;
 
                 dataFileContent = thisDataLine.PackageWeight <= Constrains.MAX_PACKAGE_WEIGHT;
 

@@ -44,7 +44,7 @@ namespace com.mobiquity.packer.Packer
             //
             foreach (var line in dataFileContent.DataLines)
             {
-                #region Validate the data line
+                #region Validate the data line (business rules)
                 string validateLineItemResults = string.Empty;
                 bool lineValidatedSuccessfully = true;
 

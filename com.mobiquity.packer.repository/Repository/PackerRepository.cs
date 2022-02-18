@@ -133,11 +133,19 @@ namespace com.mobiquity.packer.repository
         {
             int packageAllowedWeight = 0;
 
-            int searchEndPosition = dataLine.IndexOf(':', 0);
-            string textValue = dataLine.Substring(0, searchEndPosition - 0);
-            var value = Int32.TryParse(textValue, out packageAllowedWeight);
+            try
+            {
+                int searchEndPosition = dataLine.IndexOf(':', 0);
+                string textValue = dataLine.Substring(0, searchEndPosition - 0);
+                var value = Int32.TryParse(textValue, out packageAllowedWeight);
 
-            return packageAllowedWeight;
+                return packageAllowedWeight;
+            }
+            catch (Exception)
+            {
+                return 0;
+            }
+            
         }
 
         private List<DataItem> GetAndParseItemsInTestCase(string dataLine)
@@ -180,13 +188,21 @@ namespace com.mobiquity.packer.repository
 
         private string[] GetItemsInTestCase(string dataLine)
         {
-            // Get items in the text case
-            int searchStartPosition = dataLine.IndexOf(':', 0) + 2;
-            dataLine = dataLine.Substring(searchStartPosition, dataLine.Length - searchStartPosition);
+            try
+            {
+                // Get items in the text case
+                int searchStartPosition = dataLine.IndexOf(':', 0) + 2;
+                dataLine = dataLine.Substring(searchStartPosition, dataLine.Length - searchStartPosition);
 
-            string[] itemList = dataLine.Split(" ");
+                string[] itemList = dataLine.Split(" ");
 
-            return itemList;
+                return itemList;
+            }
+            catch (Exception)
+            {
+                string[] itemList = new string[0];
+                return itemList;
+            }
         }
         #endregion
     }
