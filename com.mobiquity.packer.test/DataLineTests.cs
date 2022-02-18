@@ -102,16 +102,19 @@ namespace com.mobiquity.packer.test
 
             foreach (var thisLine in dataFileContent.DataLines)                                     // Loop through all available lines and check each line 
             {
-                // Confirm all the items in the test case are valid 
-                //
-                foreach (var thisItem in thisLine.Items)
+                if (thisLine.Items != null)
                 {
-                    // Act
-                    string testResult = PackerLineValidator.LineItemsNotValid(thisLine);
+                    // Confirm all the items in the test case are valid 
+                    //
+                    foreach (var thisItem in thisLine.Items)
+                    {
+                        // Act
+                        string testResult = PackerLineValidator.LineItemsNotValid(thisLine);
 
-                    testPassed = testResult == string.Empty;
+                        testPassed = testResult == string.Empty;
 
-                    Assert.True(testPassed, $"The datafile and items needs to contains well formatted data to parse succesfully for each test case. Line# {lineNumber}. Error code return = {testResult}");
+                        Assert.True(testPassed, $"The datafile and items needs to contains well formatted data to parse succesfully for each test case. Line# {lineNumber}. Error code return = {testResult}");
+                    }
                 }
             }
         }

@@ -73,7 +73,7 @@ namespace com.mobiquity.packer.Packer
 
             try
             {
-                if (thisDataLine == null) return PACKER_LINE_VALIDATION_CODES.NumberOfItemsinDataLineLessEqualTo15;
+                if (thisDataLine.Items == null) return "";       // Ignore if there are no items in this test case
 
                 itemsInRange = thisDataLine.Items.Count <= 15;
 
@@ -116,7 +116,7 @@ namespace com.mobiquity.packer.Packer
 
             try
             {
-                if (thisDataLine == null) return PACKER_LINE_VALIDATION_CODES.ItemWeightAndCostLessEqualTo100;
+                if (thisDataLine.Items == null) return PACKER_LINE_VALIDATION_CODES.ItemWeightAndCostLessEqualTo100;
 
                 foreach (var thisItem in thisDataLine.Items)
                 {

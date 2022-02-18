@@ -32,7 +32,7 @@ namespace com.mobiquity.packer.repository
             try
             {
                 // Act
-                bool hasItems = dataLines.Count() > 0;
+                bool hasItems = dataLines.Count() > 0 && dataLines[0] != null && dataLines[0] != string.Empty;
 
                 if (hasItems)
                     return 0;
@@ -49,10 +49,10 @@ namespace com.mobiquity.packer.repository
         {
             try
             {
-                // Arrange
                 DataLine firstDataLine = dataFileContent.DataLines[0];
 
-                // Act
+                if (firstDataLine.Items == null) return PACKERFILE_VALIDATION_CODES.DataFileNeedsAtLeastOneLine;
+
                 bool hasItems = firstDataLine.Items.Count > 0;
 
                 if (hasItems)
