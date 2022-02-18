@@ -18,7 +18,7 @@ namespace com.mobiquity.packer.repository
             return fileContent;
         }
 
-        public DataFile GetParsedFileContent_OLD()
+        public DataFile GetParsedFileContent()
         {
             #region Mock Items
             var mockItemA = new DataItem

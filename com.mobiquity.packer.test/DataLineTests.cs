@@ -116,12 +116,12 @@ namespace com.mobiquity.packer.test
             }
         }
 
-        private static DataFile GetPackFileData(bool useMockData = true)
+        private static DataFile GetPackFileData(bool useMockData = false)
         {
             if (useMockData)
             {
                 // Return Mock repository data
-                return new MockPackerRepository(dataFilePath).GetParsedFileContent_OLD();
+                return new MockPackerRepository(dataFilePath).GetParsedFileContent();
             }
             else
             {
