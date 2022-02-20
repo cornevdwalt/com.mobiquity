@@ -114,7 +114,7 @@ namespace com.mobiquity.packer.test
         public void ConfirmNumberOfItemsinPackageLessEqualTo15()
         {
             // Arrange
-            var results = new PackerService().ReadAndProcessPackerData_OLD(dataFilePath);        // check against test data file
+            var results = new PackerService().ReadAndProcessPackerData(dataFilePath);        // check against test data file
             results = results.TrimEnd();
 
             string[] checkItems = results.Split(new char[] { ',' });

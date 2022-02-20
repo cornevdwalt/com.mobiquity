@@ -27,17 +27,23 @@ namespace com.mobiquity.packer.Packer
                 // Get and parse the data file content  
                 dataFileContent = new PackerRepository(filePath).GetParsedFileContent();
             }
-            
 
-
-            // TEST FIRST if File Content valid
-
-
-            foreach (var thisLine in dataFileContent.DataLines)
+            // Test if file content valid
+            //
+            int testFileResults = PackerFileValidator.DataFileNeedsAtLeastOneLine(dataFileContent);
+            string filePassValidation = HandleValidationError(testFileResults);
+            if (filePassValidation == String.Empty)
             {
-                results = ProcessPackerDataLine(thisLine);
-                lineNumber++;
+                // Validate and parse each data line 
+                //
+                foreach (var thisLine in dataFileContent.DataLines)
+                {
+                    results = ProcessPackerDataLine(thisLine);
+                    lineNumber++;
+                }
             }
+            else
+                results = filePassValidation;   
 
             return results;
         }
@@ -90,8 +96,8 @@ namespace com.mobiquity.packer.Packer
                 // Filter the items in the line for potential candidates
                 //
                 var filteringQuery = (from item in line.Items
-                                      where item.Weight <= Constrains.MAX_ITEM_COST      // Exclude items weighting more than allowed weight  
-                                             && item.Cost <= Constrains.MAX_ITEM_COST    // Exclude items costing more than allowed cost 
+                                      where item.Weight <= Constrain.MAX_ITEM_COST      // Exclude items weighting more than allowed weight  
+                                             && item.Cost <= Constrain.MAX_ITEM_COST    // Exclude items costing more than allowed cost 
                                              && line.PackageWeight >= item.Weight        // Excluding items weigthing more than the allowed package weight
 
                                       orderby item.Cost descending,                      // Looking for items costing the most
@@ -125,7 +131,7 @@ namespace com.mobiquity.packer.Packer
                     {
                         // Check that the total weight for the package is not over-weighted or more than allowed for this package
                         decimal checkWeight = totalWeightForItemsSelected + candidate.Weight;
-                        if (checkWeight > Constrains.MAX_PACKAGE_WEIGHT || checkWeight > line.PackageWeight)
+                        if (checkWeight > Constrain.MAX_PACKAGE_WEIGHT || checkWeight > line.PackageWeight)
                             break;
 
                         #region Add this item to the items for this line
@@ -168,6 +174,19 @@ namespace com.mobiquity.packer.Packer
             // Return the final results to calling clients
             foreach (var i in selectedItems) { results += i.ItemsListToDisplay + System.Environment.NewLine; };
             return results;
+        }
+
+        private string HandleValidationError(int testResult)
+        {
+            if (testResult != 0)
+            {
+                if (ExceptionTest.ENABLE_EXTENDED_LOGGING == false)
+                    return "File Error ErrCode: " + testResult;                                             // write out the error 
+                else
+                    throw new Exception("Packer File Exception raised. ErrCode: " + testResult);            // throw the error as an API error
+            }
+            else
+                return String.Empty;
         }
 
 

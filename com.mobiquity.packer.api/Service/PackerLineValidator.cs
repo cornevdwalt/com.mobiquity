@@ -87,8 +87,8 @@ namespace com.mobiquity.packer.Packer
                     if (thisItem.Index <= 0) { itemErrorCode += PACKER_LINE_VALIDATION_CODES.ItemIndexLessEqualTo100 + " "; };
                     if (thisItem.Weight <= 0) { itemErrorCode += PACKER_LINE_VALIDATION_CODES.ItemWeightLessEqualTo100 + " "; };
                     if (thisItem.Cost <= 0) { itemErrorCode += PACKER_LINE_VALIDATION_CODES.ItemCostLessEqualTo100 + " "; };
-                    if (thisItem.Weight > Constrains.MAX_PACKAGE_WEIGHT) { itemErrorCode += PACKER_LINE_VALIDATION_CODES.ItemWeightGreaterThanMaxAllowed + " "; };
-                    if (thisItem.Cost > Constrains.MAX_ITEM_COST) { itemErrorCode += PACKER_LINE_VALIDATION_CODES.ItemCostGreaterThanMaxAllowed + " "; };
+                    if (thisItem.Weight > Constrain.MAX_PACKAGE_WEIGHT) { itemErrorCode += PACKER_LINE_VALIDATION_CODES.ItemWeightGreaterThanMaxAllowed + " "; };
+                    if (thisItem.Cost > Constrain.MAX_ITEM_COST) { itemErrorCode += PACKER_LINE_VALIDATION_CODES.ItemCostGreaterThanMaxAllowed + " "; };
                 }
                 return itemErrorCode;
             }

@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace com.mobiquity.packer.Packer
 {
-    public static class Constrains
+    public static class Constrain
     {
         public const int MAX_PACKAGE_WEIGHT = 100;
         public const int MAX_ITEM_COST = 100;

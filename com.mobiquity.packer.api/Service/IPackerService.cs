@@ -5,8 +5,6 @@ namespace com.mobiquity.packer.Packer
 {
     public interface IPackerService
     {
-        string ReadAndProcessPackerData_OLD(string filePath, string unitTestDataLine = null);
-
-        //string ReadAndProcessPackerData(string filePath, IPackerRepository packerRepository);
+        string ReadAndProcessPackerData(string filePath, string unitTestDataLine = null);
     }
 }
