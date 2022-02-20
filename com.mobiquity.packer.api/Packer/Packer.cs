@@ -26,7 +26,7 @@ namespace com.mobiquity.packer.Packer
             try
             {
                 var packerService = new PackerService();
-                var results = packerService.ReadAndProcessPackerData(filePath);
+                var results = packerService.ReadAndProcessPackerData_OLD(filePath);
 
                 return results.ToString();
             }

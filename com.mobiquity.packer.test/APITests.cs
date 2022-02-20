@@ -13,19 +13,6 @@ namespace com.mobiquity.packer.test
     {
         private const string dataFilePath = Constants.PACKER_TEST_FILE_PATH;                        // Use the test/mock file for testing
 
-        [Fact]
-        public void ConfirmInputDataFileIsNotEmpty()
-        {
-            // Arrange
-            string results = CallPackerAPI(false);
-
-            // Act
-            bool hasContent = results.Length > 0;
-
-            // Assert
-            Assert.True(hasContent, "The result back from the API needs to contains data and cannot be empty");
-        }
-
         [Theory]
         [InlineData("81 : (1,5,€45) (2,88.62,€98) (3,78.48,€3) (4,72.30,€76) (5,30.18,€9) (6,46.34,€48)")]
         public void CheckProcessingLogicOfTestCaseOne(string testInput)
@@ -127,7 +114,7 @@ namespace com.mobiquity.packer.test
         public void ConfirmNumberOfItemsinPackageLessEqualTo15()
         {
             // Arrange
-            var results = new PackerService().ReadAndProcessPackerData(dataFilePath);        // check against test data file
+            var results = new PackerService().ReadAndProcessPackerData_OLD(dataFilePath);        // check against test data file
             results = results.TrimEnd();
 
             string[] checkItems = results.Split(new char[] { ',' });
@@ -137,6 +124,20 @@ namespace com.mobiquity.packer.test
 
             // Assert
             Assert.True(notMoreThan15Items, "There cannot be more than 15 items in a single package");
+        }
+
+
+        [Fact]
+        public void ConfirmInputDataFileIsNotEmpty()
+        {
+            // Arrange
+            string results = CallPackerAPI(false);
+
+            // Act
+            bool hasContent = results.Length > 0;
+
+            // Assert
+            Assert.True(hasContent, "The result back from the API needs to contains data and cannot be empty");
         }
 
 
