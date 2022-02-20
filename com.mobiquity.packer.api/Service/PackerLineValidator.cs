@@ -17,7 +17,7 @@ namespace com.mobiquity.packer.Packer
         //
         // -----------------------------------------------------------------
 
-        public static string ValidatePackerDataLine(DataLine thisDataLine)
+        public static string ValidatePackerDataLine(DataLine thisDataLine, int lineNumber)
         {
             string validationResults = string.Empty;
 

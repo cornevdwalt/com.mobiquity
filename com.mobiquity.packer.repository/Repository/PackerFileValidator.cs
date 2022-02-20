@@ -18,11 +18,11 @@ namespace com.mobiquity.packer.repository
                 if (hasContent)
                     return 0;
                 else
-                    return PACKERFILE_VALIDATION_CODES.DataFileIsNotEmpty;
+                    return PACKERFILE_VALIDATION_CODES.DataFileCouldNotBeFound;
             }
             catch (Exception)
             {
-                return PACKERFILE_VALIDATION_CODES.DataFileIsNotEmpty;
+                return PACKERFILE_VALIDATION_CODES.DataFileCouldNotBeFound;
             }
             
         }

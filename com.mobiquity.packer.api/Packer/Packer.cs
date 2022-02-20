@@ -1,7 +1,4 @@
-﻿using com.mobiquity.packer.data;
-using com.mobiquity.packer.repository;
-
-namespace com.mobiquity.packer.Packer
+﻿namespace com.mobiquity.packer.Packer
 {
     public class Packer : IPacker
     {

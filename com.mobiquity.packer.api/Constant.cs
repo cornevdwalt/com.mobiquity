@@ -9,6 +9,9 @@ namespace com.mobiquity.packer.Packer
 
     public static class ExceptionTest
     {
-        public const bool ENABLE_EXTENDED_LOGGING = true;
+        // If True, then do not raise an exception on validation failure but write out
+        // an error code in the results of the api call
+        //
+        public const bool ENABLE_EXTENDED_LOGGING = true;               
     }
 }
