@@ -15,11 +15,6 @@ namespace com.mobiquity.packer.repository
             thisFilePath = filePath;
         }
 
-        public string ReadRawFileContent()
-        {
-            return DataService.ReadAllRawDataInFile(thisFilePath);
-        }
-
         public DataFile GetParsedFileContent(string[]? unitTestFileContent = null)
         {
             bool fileParseSuccessfull = true;
@@ -91,6 +86,11 @@ namespace com.mobiquity.packer.repository
                     DataLines = thisDataLines,
                 };
             }
+        }
+
+        public string ReadRawFileContent()
+        {
+            return DataService.ReadAllRawDataInFile(thisFilePath);
         }
 
         #region Private methods

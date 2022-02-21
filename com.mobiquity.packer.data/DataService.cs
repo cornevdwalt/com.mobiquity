@@ -1,5 +1,8 @@
 ﻿namespace com.mobiquity.packer.data
 {
+    /// <summary>
+    /// Public static class to Read and Write data from a text file
+    /// </summary>
     public static class DataService
     {
         public static string[] RetrieveDataFileContent(string filePath)
@@ -22,12 +25,12 @@
                 await file.WriteLineAsync(line);
             }
         }
-        public static async Task WritePackerError(string output)
+        public static void WritePackerError(string output)
         {
             using StreamWriter file = new(Constants.PACKER_ERRORFILE_PATH, append: true);
             {
-                await file.WriteLineAsync("-- " + DateTime.Now + " ----------------------------------------------------------");
-                await file.WriteLineAsync(output);
+                file.WriteLineAsync("-- " + DateTime.Now + " ----------------------------------------------------------");
+                file.WriteLineAsync(output);
             }
         }
     }

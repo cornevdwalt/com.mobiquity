@@ -27,7 +27,7 @@ namespace com.mobiquity.web.Controllers
         {
             if (ModelState.IsValid)
             {
-                dataFile.ParseResults = _packerService.pack(dataFile.FilePath);
+                dataFile.ParseResults = _packerService.pack(dataFile.FilePath, true);
                 ViewBag.Response = dataFile.ParseResults;
             }
 

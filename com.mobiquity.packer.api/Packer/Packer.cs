@@ -1,4 +1,6 @@
-﻿namespace com.mobiquity.packer.Packer
+﻿using com.mobiquity.packer.data;
+
+namespace com.mobiquity.packer.Packer
 {
     public class Packer : IPacker
     {
@@ -28,9 +30,9 @@
         /// a separate error text file
         /// </summary>
         /// <param name="filePath"></param>
-        /// <param name="writeExceptionDetailOut"></param>
+        /// <param name="suppressException"></param>
         /// <returns></returns>
-        public string pack(string filePath, bool writeExceptionDetailOut)                                            
+        public string pack(string filePath, bool suppressException)                                            
         {
             try
             {
@@ -40,7 +42,7 @@
             }
             catch (Exception ex)
             {
-                return HandleErrorCondition(ex, writeExceptionDetailOut);
+                return HandleErrorCondition(ex, suppressException);
             }
         }
 
@@ -52,14 +54,14 @@
         /// <param name="testResult"></param>
         /// <returns></returns>
         /// <exception cref="Exception"></exception>
-        private string HandleErrorCondition(Exception ex, bool writeExceptionDetailOut = false)
+        private string HandleErrorCondition(Exception ex, bool suppressException = false)
         {
-            if (!writeExceptionDetailOut)
+            if (suppressException)
                 return "Packer exception raised. Description: " + ex.Message + System.Environment.NewLine;                              
             else
             {
-                // Write the technical exeption details to error file  (TODO)
-
+                // Write the technical exeption details to an error file  
+                DataService.WritePackerError(ex.Message + "" + ex.StackTrace);
 
                 throw new Exception("Packer exception raised. Description: " + ex.Message);            // Throw the error as an API error
             }

@@ -58,7 +58,7 @@ namespace com.mobiquity.packer.test
 
             // Assert
             Assert.True(hasContent, "Unit test for case three did not return any value and cannot be empty");
-            Assert.Equal("2,7", results);
+            Assert.Equal("2,4", results);
         }
 
         [Theory]
@@ -77,38 +77,37 @@ namespace com.mobiquity.packer.test
             Assert.Equal("8,9", results);
         }
 
-        //[Theory]
-        //[InlineData("23 : (1,22.10,€90) (2, 22.10, €45)")]
-        //public void CheckProcessingLogicOfTestCaseFive(string testInput)
-        //{
-        //    // Arrange
-        //    var results = new PackerService().ReadAndProcessPackerData(dataFilePath, testInput);        // check against test line 5
-        //    results = results.TrimEnd();
+        [Theory]
+        [InlineData("23 : (1,22.10,€90) (2,22.10,€45)")]
+        public void CheckProcessingLogicOfTestCaseFive(string testInput)
+        {
+            // Arrange
+            var results = new PackerService().ReadAndProcessPackerData(dataFilePath, testInput);        // check against test line 5
+            results = results.TrimEnd();
 
-        //    // Act
-        //    bool hasContent = results.Length > 0;
+            // Act
+            bool hasContent = results.Length > 0;
 
-        //    // Assert
-        //    Assert.True(hasContent, "Unit test for case five did not return any value and cannot be empty");
-        //    Assert.Equal("1", results);
-        //}
+            // Assert
+            Assert.True(hasContent, "Unit test for case five did not return any value and cannot be empty");
+            Assert.Equal("1", results);
+        }
 
-        //[Theory]
-        //[InlineData("45 : (1,22.10,€90) (2, 22.10, €45)")]
-        //public void CheckProcessingLogicOfTestCaseSix(string testInput)
-        //{
-        //    // Arrange
-        //    var results = new PackerService().ReadAndProcessPackerData(dataFilePath, testInput);        // check against test line 6
-        //    results = results.TrimEnd();
+        [Theory]
+        [InlineData("45 : (1,22.10,€90) (2,22.10,€45)")]
+        public void CheckProcessingLogicOfTestCaseSix(string testInput)
+        {
+            // Arrange
+            var results = new PackerService().ReadAndProcessPackerData(dataFilePath, testInput);        // check against test line 6
+            results = results.TrimEnd();
 
-        //    // Act
-        //    bool hasContent = results.Length > 0;
+            // Act
+            bool hasContent = results.Length > 0;
 
-        //    // Assert
-        //    Assert.True(hasContent, "Unit test for case six did not return any value and cannot be empty");
-        //    Assert.Equal("1,2", results);
-        //}
-
+            // Assert
+            Assert.True(hasContent, "Unit test for case six did not return any value and cannot be empty");
+            Assert.Equal("1,2", results);
+        }
 
         [Fact]
         public void ConfirmNumberOfItemsinPackageLessEqualTo15()
@@ -126,7 +125,6 @@ namespace com.mobiquity.packer.test
             Assert.True(notMoreThan15Items, "There cannot be more than 15 items in a single package");
         }
 
-
         [Fact]
         public void ConfirmInputDataFileIsNotEmpty()
         {
@@ -139,28 +137,6 @@ namespace com.mobiquity.packer.test
             // Assert
             Assert.True(hasContent, "The result back from the API needs to contains data and cannot be empty");
         }
-
-
-        //[Fact]
-        //public void TotalPackageWeightLessEqualTo100()
-        //{
-        //    // Arrange
-        //    bool testPassed = false;
-        //    var dataFileContent = GetPackFileData();
-
-        //    foreach (var thisLine in dataFileContent.DataLines)                                     // Loop through all available lines and check each line 
-        //    {
-        //        // Act
-        //        string testResult = PackerLineValidator.TotalPackageWeightLessEqualTo100(thisLine);
-
-        //        testPassed = testResult == string.Empty;
-
-        //        Assert.True(testPassed, $"The total weight of a package may not be more then {allowedPackageWeight}. Line# {lineNumber}. Error code return = {testResult}");
-
-        //        lineNumber++;
-        //    }
-        //}
-
 
         private static string CallPackerAPI(bool useMockData = false)
         {

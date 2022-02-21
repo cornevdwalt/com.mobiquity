@@ -205,27 +205,6 @@ namespace com.mobiquity.packer.Packer
         }
 
         /// <summary>
-        /// Handle a DataFile or DataItem validation condition, depending on the set condition
-        /// write out either the error with an error code or raise an exception to be handled
-        /// by the calling system.
-        /// </summary>
-        /// <param name="testResult"></param>
-        /// <returns></returns>
-        /// <exception cref="Exception"></exception>
-        //private string HandleValidationError(int testResult)
-        //{
-        //    if (testResult != 0)
-        //    {
-        //        if (ExceptionTest.ENABLE_EXTENDED_LOGGING)
-        //            return "File error code: " + testResult + System.Environment.NewLine;                  // Write out the error 
-        //        else
-        //            throw new Exception("Packer File Exception raised. ErrCode: " + testResult);            // Throw the error as an API error
-        //    }
-        //    else
-        //        return String.Empty;
-        //}
-
-        /// <summary>
         /// Private structure to parse and track the selected item in a test case (line)
         /// </summary>
         private class SelectedItem : IEnumerable
