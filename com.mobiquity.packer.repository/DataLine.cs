@@ -5,5 +5,10 @@
         public int LineNumber { get; set; }
         public int PackageWeight { get; set; } = 0;
         public IList<DataItem>? Items { get; set;}
+
+        IEnumerable<DataItem> GetAllDataItems()
+        {
+            return this.Items.ToList();
+        }
     }
 }

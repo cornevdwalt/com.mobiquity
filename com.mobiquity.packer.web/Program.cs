@@ -4,7 +4,7 @@ var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
-builder.Services.AddScoped<IPacker, Packer>();                          // Mobiquity packer dependency injection       
+builder.Services.AddScoped<IPacker, Packer>();                          // Mobiquity packer api dependency injection       
 
 var app = builder.Build();
 

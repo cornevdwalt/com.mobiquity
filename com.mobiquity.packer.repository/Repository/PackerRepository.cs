@@ -59,13 +59,14 @@ namespace com.mobiquity.packer.repository
                     else
                     {
                         fileParseSuccessfull = false;
-                        break;                                          // For now do not continue with the rest of the file... 
+                        break;                                          
                     }
                 }
             }
 
             if (fileParseSuccessfull)
             {
+                // Data line parsed succesfully and can be addedd 
                 return new DataFile()
                 {
                     DataLines = thisDataLines,

@@ -9,6 +9,9 @@ using Xunit;
 
 namespace com.mobiquity.packer.test
 {
+    /// <summary>
+    /// Class to run xUnit test scenario's on different data line test cases 
+    /// </summary>
     public class APITests
     {
         private const string dataFilePath = Constants.PACKER_TEST_FILE_PATH;                        // Use the test/mock file for testing
