@@ -162,17 +162,20 @@ namespace com.mobiquity.packer.repository
             {
                 DataItem newDataItem = new DataItem();
 
-                // Get the different segments of the test case item
-                //
-                string[] itemList = item.Split(",");
+                if (!string.IsNullOrEmpty(item))
+                {
+                    // Get the different segments of the test case item
+                    //
+                    string[] itemList = item.Split(",");
 
-                var x = itemList[0].AsSpan(1);                                          // Item index
-                var y = itemList[1];                                                    // Item weight
-                var z = itemList[2].AsSpan(1, itemList[2].Length - 2);                  // Item cost
+                    var x = itemList[0].AsSpan(1);                                          // Item index
+                    var y = itemList[1];                                                    // Item weight
+                    var z = itemList[2].AsSpan(1, itemList[2].Length - 2);                  // Item cost
 
-                _ = Int32.TryParse(x, out index);
-                _ = Decimal.TryParse(y, out weight);                                    // TODO - confirm culture will not cause side effects (cvdw - 15/2/2022)
-                _ = Int32.TryParse(z, out cost);
+                    _ = Int32.TryParse(x, out index);
+                    _ = Decimal.TryParse(y, out weight);                                    // TODO - confirm culture will not cause side effects (cvdw - 15/2/2022)
+                    _ = Int32.TryParse(z, out cost);
+                }
 
                 DataItem i = new DataItem
                 {

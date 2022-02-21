@@ -27,7 +27,7 @@ do
     try
     {
         results = packer.pack(input);                   // Pass input to the Packer to proces
-                                                        //results = MockPacker.Pack(input);             // Mock for testing directly (static)
+        //results = MockPacker.Pack(input);             // Mock for testing directly (static)
 
         Console.WriteLine("---------------------------------------------------");
         Console.WriteLine(results);
