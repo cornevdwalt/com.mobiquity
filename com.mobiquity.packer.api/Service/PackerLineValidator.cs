@@ -32,7 +32,7 @@ namespace com.mobiquity.packer.Packer
         }
 
         // ---------------------------------------------------------------------
-        // Keeping the separate test public to allow unit testing from xunit
+        // Keeping the separate test methods public to allow unit testing from xunit
         // ---------------------------------------------------------------------
         public static string DataLineTotalWeightGreaterThanZero(DataLine thisDataLine)
         {

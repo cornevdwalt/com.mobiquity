@@ -20,7 +20,6 @@ namespace com.mobiquity.packer.repository
             return DataService.ReadAllRawDataInFile(thisFilePath);
         }
 
-
         public DataFile GetParsedFileContent(string[]? unitTestFileContent = null)
         {
             bool fileParseSuccessfull = true;

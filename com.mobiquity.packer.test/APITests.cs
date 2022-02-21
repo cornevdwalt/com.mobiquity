@@ -18,7 +18,7 @@ namespace com.mobiquity.packer.test
         public void CheckProcessingLogicOfTestCaseOne(string testInput)
         {
             // Arrange
-            var results = new PackerService().ReadAndProcessPackerData(dataFilePath, false, testInput);        // check against test line 1
+            var results = new PackerService().ReadAndProcessPackerData(dataFilePath, testInput);        // check against test line 1
             results = results.TrimEnd();
 
             // Act
@@ -34,7 +34,7 @@ namespace com.mobiquity.packer.test
         public void CheckProcessingLogicOfTestCaseTwo(string testInput)
         {
             // Arrange
-            var results = new PackerService().ReadAndProcessPackerData(dataFilePath, false, testInput);        // check against test line 2
+            var results = new PackerService().ReadAndProcessPackerData(dataFilePath, testInput);        // check against test line 2
             results = results.TrimEnd();
 
             // Act
@@ -50,7 +50,7 @@ namespace com.mobiquity.packer.test
         public void CheckProcessingLogicOfTestCaseThree(string testInput)
         {
             // Arrange
-            var results = new PackerService().ReadAndProcessPackerData(dataFilePath, false, testInput);        // check against test line 3
+            var results = new PackerService().ReadAndProcessPackerData(dataFilePath, testInput);        // check against test line 3
             results = results.TrimEnd();
 
             // Act
@@ -66,7 +66,7 @@ namespace com.mobiquity.packer.test
         public void CheckProcessingLogicOfTestCaseFour(string testInput)
         {
             // Arrange
-            var results = new PackerService().ReadAndProcessPackerData(dataFilePath, false, testInput);        // check against test line 4
+            var results = new PackerService().ReadAndProcessPackerData(dataFilePath, testInput);        // check against test line 4
             results = results.TrimEnd();
 
             // Act

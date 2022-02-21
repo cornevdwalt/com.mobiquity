@@ -13,9 +13,8 @@
         {
             try
             {
-                bool raiseException = true;
                 var packerService = new PackerService();
-                var results = packerService.ReadAndProcessPackerData(filePath, raiseException);
+                var results = packerService.ReadAndProcessPackerData(filePath);
                 return results.ToString();
             }
             catch (Exception ex)
@@ -25,24 +24,23 @@
         }
 
         /// <summary>
-        /// Override method with option to not raise an exception when a error condition occurred but to 
-        /// rather write out the validation or exception details as part of the results back to the calling client
-        /// and generate a separate error text file with the details of the exception.
+        /// Override method with option to write the details of the exception in
+        /// a separate error text file
         /// </summary>
         /// <param name="filePath"></param>
-        /// <param name="raiseException"></param>
+        /// <param name="writeExceptionDetailOut"></param>
         /// <returns></returns>
-        public string pack(string filePath, bool raiseException = false)                                            
+        public string pack(string filePath, bool writeExceptionDetailOut)                                            
         {
             try
             {
                 var packerService = new PackerService();
-                var results = packerService.ReadAndProcessPackerData(filePath, raiseException);
+                var results = packerService.ReadAndProcessPackerData(filePath);
                 return results.ToString();
             }
             catch (Exception ex)
             {
-                return HandleErrorCondition(ex, raiseException);
+                return HandleErrorCondition(ex, writeExceptionDetailOut);
             }
         }
 
@@ -54,16 +52,16 @@
         /// <param name="testResult"></param>
         /// <returns></returns>
         /// <exception cref="Exception"></exception>
-        private string HandleErrorCondition(Exception ex, bool raiseException = true)
+        private string HandleErrorCondition(Exception ex, bool writeExceptionDetailOut = false)
         {
-            if (raiseException)
-                return "Packer File Exception raised. Error description: " + ex.Message + System.Environment.NewLine;                              
+            if (!writeExceptionDetailOut)
+                return "Packer exception raised. Description: " + ex.Message + System.Environment.NewLine;                              
             else
             {
                 // Write the technical exeption details to error file  (TODO)
 
 
-                throw new Exception("Packer File Exception raised. Error description: " + ex.Message);            // Throw the error as an API error
+                throw new Exception("Packer exception raised. Description: " + ex.Message);            // Throw the error as an API error
             }
         }
     }

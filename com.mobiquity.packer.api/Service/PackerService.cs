@@ -14,7 +14,7 @@ namespace com.mobiquity.packer.Packer
         /// <param name="filePath"></param>
         /// <param name="unitTestDataLine"></param>
         /// <returns></returns>
-        public string ReadAndProcessPackerData(string filePath, bool raiseException = true, string unitTestDataLine = null)
+        public string ReadAndProcessPackerData(string filePath, string unitTestDataLine = null)
         {
             string results = string.Empty;
             int lineNumber = 1;
@@ -36,12 +36,12 @@ namespace com.mobiquity.packer.Packer
             {
                 try
                 {
-                    // Get and parse the data file content  
+                    // Try to get and parse the data file content  
                     dataFileContent = new PackerRepository(filePath).GetParsedFileContent();
                 }
                 catch (Exception)
                 {
-                    filePassValidationMsg = "File error code: " + PACKERFILE_VALIDATION_CODES.DataFileCouldNotBeFound + System.Environment.NewLine;
+                    filePassValidationMsg = "<error " + PACKERFILE_VALIDATION_CODES.DataFileCouldNotBeFound + "> ";
                     fileParsedSuccessfully = false;
                 }
             }
@@ -51,7 +51,7 @@ namespace com.mobiquity.packer.Packer
             int dataFileValidationResults = PackerFileValidator.DataFileNeedsAtLeastOneLine(dataFileContent);
             if (dataFileValidationResults != 0)
             {
-                filePassValidationMsg += "File error code: " + dataFileValidationResults + System.Environment.NewLine;
+                filePassValidationMsg += "<error " + dataFileValidationResults +"> ";
                 fileParsedSuccessfully = false;
             }
 
@@ -69,9 +69,9 @@ namespace com.mobiquity.packer.Packer
             else
                 results = filePassValidationMsg;
 
-            // If the file did not pass validation throw an exception to notify the calling application
+            // If the file did not pass validation raise an exception to notify the calling application
             if (!fileParsedSuccessfully) 
-                throw new Exception("Packer File Exception raised. Error description: " + filePassValidationMsg);
+                throw new Exception("File error: " + filePassValidationMsg);
 
             return results;
         }
