@@ -7,6 +7,9 @@ using System.Threading.Tasks;
 
 namespace com.mobiquity.packer.Packer
 {
+    /// <summary>
+    /// Class to validate the data line for the input file (test case)
+    /// </summary>
     public static class PackerLineValidator
     {
         // -----------------------------------------------------------------

@@ -5,6 +5,10 @@ using System.Collections;
 
 namespace com.mobiquity.packer.Packer
 {
+    /// <summary>
+    /// Public class to read, parse and process the input data from a text input file for 
+    /// the Packer solution
+    /// </summary>
     public class PackerService : IPackerService
     {
         /// <summary>

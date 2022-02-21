@@ -2,6 +2,9 @@
 
 namespace com.mobiquity.packer.repository
 {
+    /// <summary>
+    /// Mock repository to access mock Packer input data
+    /// </summary>
     public class MockPackerRepository : IPackerRepository
     {
         private string thisFilePath;

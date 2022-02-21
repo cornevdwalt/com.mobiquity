@@ -3,6 +3,10 @@ using Microsoft.Extensions.DependencyInjection;
 
 namespace com.mobiquity.packer.Packer
 {
+    /// <summary>
+    /// Dependency injection server collection extention class for
+    /// the Packer interfaces
+    /// </summary>
     public static class IServiceCollectionExtension
     {
         public static IServiceCollection PackerLibrary(this IServiceCollection services)

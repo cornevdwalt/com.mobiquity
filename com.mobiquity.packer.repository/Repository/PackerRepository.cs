@@ -3,6 +3,9 @@ using com.mobiquity.packer.domain;
 
 namespace com.mobiquity.packer.repository
 {
+    /// <summary>
+    /// Repository to access the Packer input data 
+    /// </summary>
     public class PackerRepository : IPackerRepository
     {
         private int allowedPackageWeight = 0;
