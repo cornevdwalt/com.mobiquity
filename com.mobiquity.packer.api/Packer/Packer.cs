@@ -63,7 +63,7 @@ namespace com.mobiquity.packer.Packer
                 // Write the technical exeption details to an error file  
                 DataService.WritePackerError(ex.Message + "" + ex.StackTrace);
 
-                throw new Exception("Packer exception raised. Description: " + ex.Message);            // Throw the error as an API error
+                throw ex;           // Throw the error as an API error
             }
         }
     }

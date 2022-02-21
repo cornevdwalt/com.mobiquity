@@ -140,17 +140,14 @@ namespace com.mobiquity.packer.Packer
                                       select item).Take(15);                             // Considering only up to 15 items
 
 
-
-                var test = filteringQuery.ToList();         // for testing only (cvdw)
-
-
                 // Loop through all the items in the test case and keep including items in the package
                 // while the total weight for the package is less than 100 (constrain)
                 // and the item's weight is not greater than the total weight allowed for this package
                 //
                 foreach (var candidate in filteringQuery)
                 {
-                    // Check if we have not already selected a simular item with the same cost/prize
+                    // Check if we have not already selected a simular item with the same cost/price
+                    // (items with the same price but weighting the least are included)
                     //
                     bool costAlreadyIncluded = false;
                     foreach (var i in pricesForItemsForLineAlreadySelected)

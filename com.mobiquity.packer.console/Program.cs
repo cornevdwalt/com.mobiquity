@@ -23,13 +23,24 @@ do
     string? input = Console.ReadLine();
     if (string.IsNullOrEmpty(input)) break;
 
-    results = packer.pack(input);                   // Pass input to the Packer to proces
-    //results = MockPacker.Pack(input);             // Mock for testing directly (static)
 
-    Console.WriteLine("---------------------------------------------------");
-    Console.WriteLine(results);
-    Console.WriteLine();
+    try
+    {
+        results = packer.pack(input);                   // Pass input to the Packer to proces
+                                                        //results = MockPacker.Pack(input);             // Mock for testing directly (static)
 
+        Console.WriteLine("---------------------------------------------------");
+        Console.WriteLine(results);
+        Console.WriteLine();
+    }
+    catch (Exception ex)
+    {
+        Console.WriteLine("---------------------------------------------------");
+        Console.WriteLine(ex.Message);                  // Show exception message to user
+    }
+    finally { }
+
+ 
     row += 4;
 
 } while (true);

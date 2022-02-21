@@ -85,9 +85,11 @@ namespace com.mobiquity.packer.Packer
             {
                 if (thisDataLine.Items == null) return PACKER_LINE_VALIDATION_CODES.ItemWeightAndCostLessEqualTo100;
 
+                // For each item in the test case validate the item according to the applicable business rules
+                //
                 foreach (var thisItem in thisDataLine.Items)
                 {
-                    if (thisItem.Index <= 0) { itemErrorCode += PACKER_LINE_VALIDATION_CODES.ItemIndexLessEqualTo100 + " "; };
+                    if (thisItem.Index <= 0) { itemErrorCode += PACKER_LINE_VALIDATION_CODES.ItemIndexGreatherThanZero + " "; };
                     if (thisItem.Weight <= 0) { itemErrorCode += PACKER_LINE_VALIDATION_CODES.ItemWeightLessEqualTo100 + " "; };
                     if (thisItem.Cost <= 0) { itemErrorCode += PACKER_LINE_VALIDATION_CODES.ItemCostLessEqualTo100 + " "; };
                     if (thisItem.Weight > Constrain.MAX_PACKAGE_WEIGHT) { itemErrorCode += PACKER_LINE_VALIDATION_CODES.ItemWeightGreaterThanMaxAllowed + " "; };
