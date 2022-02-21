@@ -14,12 +14,14 @@ namespace com.mobiquity.packer.Packer
         /// <param name="filePath"></param>
         /// <param name="unitTestDataLine"></param>
         /// <returns></returns>
-        public string ReadAndProcessPackerData(string filePath, string unitTestDataLine = null)
+        public string ReadAndProcessPackerData(string filePath, bool raiseException = true, string unitTestDataLine = null)
         {
             string results = string.Empty;
-            string filePassValidation = String.Empty;
             int lineNumber = 1;
             DataFile dataFileContent = new DataFile();
+
+            bool fileParsedSuccessfully = true;
+            string filePassValidationMsg = String.Empty;
 
             // For unit testing allow this method to receive a dataline  
             // directly as an input parameter, otherwise retrieve file content from file
@@ -39,28 +41,37 @@ namespace com.mobiquity.packer.Packer
                 }
                 catch (Exception)
                 {
-                    filePassValidation = HandleValidationError(PACKERFILE_VALIDATION_CODES.DataFileCouldNotBeFound);
+                    filePassValidationMsg = "File error code: " + PACKERFILE_VALIDATION_CODES.DataFileCouldNotBeFound + System.Environment.NewLine;
+                    fileParsedSuccessfully = false;
                 }
             }
 
-            // Test if file content valid
+            // Test if the file content valid
             //
-            int testFileResults = PackerFileValidator.DataFileNeedsAtLeastOneLine(dataFileContent);
-            filePassValidation += HandleValidationError(testFileResults);
+            int dataFileValidationResults = PackerFileValidator.DataFileNeedsAtLeastOneLine(dataFileContent);
+            if (dataFileValidationResults != 0)
+            {
+                filePassValidationMsg += "File error code: " + dataFileValidationResults + System.Environment.NewLine;
+                fileParsedSuccessfully = false;
+            }
 
             // If file content passed validation process each line in the file
-            if (filePassValidation == String.Empty)
+            if (fileParsedSuccessfully)
             {
                 // Validate and process each data line 
                 //
                 foreach (var thisLine in dataFileContent.DataLines)
                 {
-                    results += ProcessPackerDataLine(thisLine);
+                    results += ProcessPackerDataLine(thisLine, lineNumber);
                     lineNumber++;
                 }
             }
             else
-                results = filePassValidation;   
+                results = filePassValidationMsg;
+
+            // If the file did not pass validation throw an exception to notify the calling application
+            if (!fileParsedSuccessfully) 
+                throw new Exception("Packer File Exception raised. Error description: " + filePassValidationMsg);
 
             return results;
         }
@@ -71,7 +82,7 @@ namespace com.mobiquity.packer.Packer
         /// </summary>
         /// <param name="line"></param>
         /// <returns></returns>
-        private string ProcessPackerDataLine(DataLine line)
+        private string ProcessPackerDataLine(DataLine line, int lineNumber)
         {
             string results = string.Empty;
 
@@ -87,7 +98,7 @@ namespace com.mobiquity.packer.Packer
             string validateLineItemResults = string.Empty;
             bool lineValidatedSuccessfully = true;
 
-            validateLineItemResults = PackerLineValidator.ValidatePackerDataLine(line);
+            validateLineItemResults = PackerLineValidator.ValidatePackerDataLine(line, lineNumber);
             if (validateLineItemResults != string.Empty)
             {
                 selectedItems.Add(new SelectedItem
@@ -201,19 +212,18 @@ namespace com.mobiquity.packer.Packer
         /// <param name="testResult"></param>
         /// <returns></returns>
         /// <exception cref="Exception"></exception>
-        private string HandleValidationError(int testResult)
-        {
-            if (testResult != 0)
-            {
-                if (ExceptionTest.ENABLE_EXTENDED_LOGGING)
-                    return "File error code: " + testResult + System.Environment.NewLine;                  // Write out the error 
-                else
-                    throw new Exception("Packer File Exception raised. ErrCode: " + testResult);            // Throw the error as an API error
-            }
-            else
-                return String.Empty;
-        }
-
+        //private string HandleValidationError(int testResult)
+        //{
+        //    if (testResult != 0)
+        //    {
+        //        if (ExceptionTest.ENABLE_EXTENDED_LOGGING)
+        //            return "File error code: " + testResult + System.Environment.NewLine;                  // Write out the error 
+        //        else
+        //            throw new Exception("Packer File Exception raised. ErrCode: " + testResult);            // Throw the error as an API error
+        //    }
+        //    else
+        //        return String.Empty;
+        //}
 
         /// <summary>
         /// Private structure to parse and track the selected item in a test case (line)

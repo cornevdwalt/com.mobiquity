@@ -25,6 +25,9 @@ namespace com.mobiquity.packer.Packer
             validationResults += DataLineTotalWeightGreaterThanZero(thisDataLine);
             validationResults += LineItemsValidValues(thisDataLine);
 
+            if (validationResults != string.Empty)
+                validationResults = "Line# " + lineNumber + validationResults;
+
             return validationResults;
         }
 
